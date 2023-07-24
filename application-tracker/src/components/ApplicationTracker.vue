@@ -21,7 +21,7 @@
                         Applications
                     </p>
                 </div>
-                <div class="border-2 border-solid border-black basis-1/4 my-auto">
+                <div class="basis-1/4 my-auto">
                     <TopControlBar></TopControlBar>
                 </div>
             </div>

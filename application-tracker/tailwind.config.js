@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     gridTemplateColumns: {
       'layout-col': '120px repeat(11, minmax(0, 1fr))'
@@ -26,6 +26,5 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 }
 
