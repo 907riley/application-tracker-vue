@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="border-2 border-red" >
+  <div class="h-max" >
     Application
   </div>
 </template>
