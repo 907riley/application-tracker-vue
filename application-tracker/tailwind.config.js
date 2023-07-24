@@ -18,7 +18,10 @@ module.exports = {
       'dark-blue-custom': '#6B98BB',
     },
     dropShadow: {
-      '3xl': '0 35px 35px rgba(0, 0, 0, 0.25)',
+      '3xl': '0px 3px 3px rgba(0, 0, 0, 0.5)',
+    },
+    fontFamily: {
+      'genos': ['Genos','ui-san-serif'],
     },
     extend: {},
   },
