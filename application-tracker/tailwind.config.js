@@ -17,6 +17,9 @@ module.exports = {
       'light-blue-custom': '#AEDBFF',
       'dark-blue-custom': '#6B98BB',
     },
+    dropShadow: {
+      '3xl': '0 35px 35px rgba(0, 0, 0, 0.25)',
+    },
     extend: {},
   },
   plugins: [],

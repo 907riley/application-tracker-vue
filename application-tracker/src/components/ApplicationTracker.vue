@@ -9,7 +9,7 @@
             Side panel
         </div>
         <div class="grid grid-rows-layout-row col-start-2 col-span-11">
-            <div class="bg-dark-blue-custom row-start-1 row-span-1 flex flex-row border-b-2 border-black">
+            <div class="bg-dark-blue-custom row-start-1 row-span-1 flex flex-row border-b-2 border-black drop-shadow-2xl">
                 <div class="font-bold">
                     Applications
                 </div>
