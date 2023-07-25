@@ -3,7 +3,22 @@
 </script>
 
 <template>
-  <ApplicationTracker>
-
-  </ApplicationTracker>
+  <div class="app">
+    <ApplicationTracker></ApplicationTracker>
+  </div>
 </template>
+
+<style>
+.app {
+  /* display: flex; */
+}
+
+main {
+  /* flex: 1 1 0; */
+
+  @media (max-width: 768px) {
+    padding-left: 6rem;
+  }
+}
+
+</style>
