@@ -8,10 +8,10 @@
 <template>
     <div id="page-wrapper" class="flex flex-cols h-screen">
         <SideBar></SideBar>
-        <main class="grid grid-rows-layout-row col-start-2 col-span-11">
-            <div class="bg-dark-blue-custom row-start-1 row-span-1 flex flex-row border-b-2 border-black drop-shadow-3xl z-10 top-bar-wrapper   ">
+        <main class="">
+            <div class="bg-dark-blue-custom flex flex-row border-b-2 border-black drop-shadow-3xl z-10 top-bar-wrapper">
                 <div class="my-auto mx-10 basis-3/4">
-                    <p class="font-bold text-6xl font-genos">
+                    <p class="font-bold text-6xl font-genos title">
                         Applications
                     </p>
                 </div>
@@ -19,7 +19,7 @@
                     <TopControlBar></TopControlBar>
                 </div>
             </div>
-            <div class="bg-light-blue-custom row-start-2 row-span-7">
+            <div class="content-wrapper">
                 <RouterView></RouterView>
             </div>
         </main>
@@ -28,18 +28,31 @@
 
 <style scoped lang="scss">
     #page-wrapper {
-    display: flex; 
+        display: flex; 
 
-    main {
-        flex: 1 1 0;
+        main {
+            flex: 1 1 0;
 
-        @media (max-width: 768px) {
-        padding-left: 6rem;
+            display: flex;
+            flex-direction: column;
+
+            @media (max-width: 768px) {
+                padding-left: 6rem;
+            }
+
+            .top-bar-wrapper {
+                height: 116px;
+                background-color: var(--dark-aquamarine);
+            }
+
+            .content-wrapper {
+                flex: 1 1 0;
+                background-color: var(--light-aquamarine);
+            }
         }
     }
-    }
-    .top-bar-wrapper {
-        height: 116px;
-    }
 
+    .title {
+        color: white;
+    }
 </style>

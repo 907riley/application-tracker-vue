@@ -23,13 +23,12 @@
                 </div>
             </button>
         </div>
-        <h3>Menu</h3>
         <div class="menu">
-            <router-link class="button" to="/">
+            <router-link class="menu-button" to="/">
                 <span class="material-symbols-outlined">home</span>
                 <span class="menu-text">Home</span>
             </router-link>
-            <router-link class="button" to="/stats">
+            <router-link class="menu-button" to="/stats">
                 <span class="material-symbols-outlined">monitoring</span>
                 <span class="menu-text">Stats</span>
             </router-link>
@@ -38,7 +37,7 @@
         <div class="flex"></div>
 
         <div class="menu">
-            <router-link class="button" to="/settings">
+            <router-link class="menu-button" to="/settings">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="menu-text">Settings</span>
             </router-link>
@@ -55,7 +54,7 @@
         overflow: hidden;
         min-height: 100vh;
 
-        background-color: var(--dark-blue);
+        background-color: var(--dark-aquamarine);
         border-right: 2px solid black;
 
         transition: 0.2s ease-out;
@@ -73,32 +72,32 @@
                 transition: 0.2s ease-out;
                 padding: 2rem;
 
+                svg {
+                    path {
+                        stroke: var(--light-pink);
+                    }
+                }
+
                 &:hover {
                     svg {
                         path {
                             transition: 0.2s ease-out;
-                            stroke: var(--light-blue);
+                            stroke: var(--bright-pink);
                         }
                     }   
                 }
             }
         }
 
-        h3, .button .menu-text {
+        .menu-button .menu-text {
             opacity: 0;
-            transition: 0.3s ease-out;
-        }
-
-        h3 {
-            font-size: 0rem;
-            margin: 0rem;
-            text-transform: uppercase;
+            visibility: hidden;
         }
 
         .menu {
-            margin: 0 -1rem;
+            // margin: 0 -1rem;
 
-            .button {
+            .menu-button {
                 display: flex;
                 align-items: center;
                 text-decoration: none;
@@ -107,26 +106,31 @@
                 transition: 0.2s ease-out;
 
                 .material-symbols-outlined {
-                    font-size: 2rem;
-                    color: white;
+                    font-size: 3rem;
+                    color: var(--light-aquamarine);
                     transition: 0.2s ease-out;
+                    margin-left: 1rem;
                 }
 
                 .menu-text {
-                    color: white;
+                    color: var(--light-aquamarine);
+                    font-family: 'Genos';
+                    font-weight: bold;
                     transition: 0.2s ease-out;
                 }
 
                 &:hover, &.router-link-exact-active {
-                    background-color: grey;
+                    background-color: var(--light-pink);
+
 
                     .material-symbols-outlined, .menu-text {
                         color: white;
                     } 
+
                 }
 
                 &.router-link-exact-active {
-                    border-right: 5px solid black;
+                    border-right: 5px solid var(--bright-pink);
                 }
             }
         }
@@ -134,21 +138,23 @@
         &.is_expanded {
             width: var(--side-bar-width);
 
-            h3, .button .menu-text {
+            .menu-button .menu-text {
                 opacity: 1;
             }
 
-            h3 {
-                color: black;
-                font-size: 1 rem;
-                margin-bottom: 0.5rem;
-                text-transform: uppercase;
+            .menu-text {
+                visibility: visible;
+                font-size: 2rem;
             }
 
-            .button {
+            .menu-button {
                 .material-symbols-outlined {
                     margin-right: 1rem;
                 }
+
+                &.router-link-exact-active {
+                    background-image: linear-gradient(to right, var(--light-pink) 50%, var(--dark-aquamarine));
+                }   
             }
         }
 
@@ -158,8 +164,4 @@
         }
     }
 
-
-    .is_expanded {
-    column-span: 2;
-    }
 </style>
