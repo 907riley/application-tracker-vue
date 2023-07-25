@@ -4,7 +4,7 @@
 </script>
 
 <template>
-        <div class="flex flex-row mx-10 h-12 place-content-between">
+        <div class="flex flex-row mx-10 place-content-between">
             <div id="drop-down-wrapper" class="bg-light-blue-custom border-2 basis-4/5 flex flex-col">
                 <DropDownVue></DropDownVue>
             </div>

@@ -3,22 +3,27 @@
 </script>
 
 <template>
-  <div class="app">
-    <ApplicationTracker></ApplicationTracker>
-  </div>
+  <ApplicationTracker></ApplicationTracker>
 </template>
 
-<style>
-.app {
-  /* display: flex; */
-}
-
-main {
-  /* flex: 1 1 0; */
-
-  @media (max-width: 768px) {
-    padding-left: 6rem;
+<style lang="scss">
+  :root {
+    --dark-blue: #6B98BB;
+    --light-blue: #AEDBFF;
+    --side-bar-width: 300px;
   }
-}
 
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  button {
+    cursor: pointer;
+    appearance: none;
+    border: none;
+    outline: none;
+    background: none;
+  }
 </style>
