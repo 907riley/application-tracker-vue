@@ -12,7 +12,7 @@
             <div class="bg-dark-blue-custom flex flex-row border-b-2 border-black drop-shadow-3xl z-10 top-bar-wrapper">
                 <div class="my-auto mx-10 basis-3/4">
                     <p class="font-bold text-6xl font-genos title">
-                        Applications
+                        {{$route.name}}
                     </p>
                 </div>
                 <div class="basis-1/4 my-auto">
