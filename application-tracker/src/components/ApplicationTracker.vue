@@ -9,15 +9,13 @@
     <div id="page-wrapper" class="flex flex-cols h-screen">
         <SideBar></SideBar>
         <main class="">
-            <div class="bg-dark-blue-custom flex flex-row border-b-2 border-black drop-shadow-3xl z-10 top-bar-wrapper">
-                <div class="my-auto mx-10 basis-3/4">
+            <div class="bg-dark-blue-custom flex flex-row border-2 border-black drop-shadow-3xl z-10 top-bar-wrapper">
+                <div class="my-auto mx-10 flex-1">
                     <p class="font-bold text-6xl font-genos title">
                         {{$route.name}}
                     </p>
                 </div>
-                <div class="basis-1/4 my-auto">
-                    <TopControlBar></TopControlBar>
-                </div>
+                <TopControlBar></TopControlBar>
             </div>
             <div class="content-wrapper">
                 <RouterView></RouterView>
@@ -47,7 +45,10 @@
 
             .content-wrapper {
                 flex: 1 1 0;
-                background-color: var(--light-aquamarine);
+
+                display: flex;
+                flex-direction: column;
+                // background-color: var(--light-aquamarine);
             }
         }
     }

@@ -1,21 +1,36 @@
 <script setup lang="ts">
     import DropDownVue from './DropDown.vue';
-    import VerticalPlus from './icons/VerticalPlus.vue'
 </script>
 
 <template>
-        <div class="flex flex-row mx-10 place-content-between">
-            <div id="drop-down-wrapper" class="border-2 basis-4/5 flex flex-col dropdown-wrapper">
+        <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
+            <div class="border-2 dropdown-wrapper flex">
                 <DropDownVue></DropDownVue>
             </div>
-            <div id="add-hunt-wrapper" class="border-2 text-6xl place-content-center h-fit p-1 vertical-plus-wrapper">
-                <VerticalPlus></VerticalPlus>
+            <div class="vertical-plus-wrapper">
+                <span class="material-symbols-outlined">add</span>
             </div>
         </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .top-control-wrapper {
+        display: flex;
+        flex-direction: row;
+
+        & > * {
+            border: 2px solid black;
+        }
+    }
+
     .vertical-plus-wrapper {
         background-color: var(--light-aquamarine);
+        display: flex;
     }
+
+    .material-symbols-outlined {
+        font-size: 3rem;
+        flex: 1 1 0;
+    }
+
 </style>
