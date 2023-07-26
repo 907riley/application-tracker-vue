@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <RouterView></RouterView>
+  <Login></Login>
 </template>
 
 <style lang="scss">

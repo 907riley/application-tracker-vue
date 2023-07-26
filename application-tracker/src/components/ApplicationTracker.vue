@@ -3,14 +3,6 @@
     import Applications from './Applications.vue'
     import TopControlBar from './TopControlBox.vue'
     import SideBar from './SideBar.vue'
-
-    import { useAuth0 } from '@auth0/auth0-vue';
-
-    const { logout } = useAuth0();
-
-    const logoutUser = () => {
-        logout({ logoutParams: { returnTo: window.location.origin } });
-    }
 </script>
 
 <template>
@@ -25,7 +17,7 @@
                 </div>
                 <TopControlBar></TopControlBar>
                 <div>
-                    <button @click="logoutUser" class="bg-white">Log out</button>
+                    <!-- <button @click="logoutUser" class="bg-white">Log out</button> -->
                 </div>
             </div>
             <div class="content-wrapper">
