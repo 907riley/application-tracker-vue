@@ -10,6 +10,11 @@
 
         localStorage.setItem("is_expanded", JSON.stringify(is_expanded.value))
     }
+
+    const CloseMenu = () => {
+        is_expanded.value = false
+        localStorage.setItem("is_expanded", JSON.stringify(is_expanded.value))
+    }
 </script>
 
 <template>
@@ -24,11 +29,11 @@
             </button>
         </div>
         <div class="menu">
-            <router-link class="menu-button" to="/">
+            <router-link class="menu-button" to="/" @click="CloseMenu">
                 <span class="material-symbols-outlined">home</span>
                 <span class="menu-text">Home</span>
             </router-link>
-            <router-link class="menu-button" to="/stats">
+            <router-link class="menu-button" to="/stats" @click="CloseMenu">
                 <span class="material-symbols-outlined">monitoring</span>
                 <span class="menu-text">Stats</span>
             </router-link>
@@ -37,7 +42,7 @@
         <div class="flex"></div>
 
         <div class="menu">
-            <router-link class="menu-button" to="/settings">
+            <router-link class="menu-button" to="/settings" @click="CloseMenu">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="menu-text">Settings</span>
             </router-link>
