@@ -48,7 +48,7 @@
 
                 display: flex;
                 flex-direction: column;
-                // background-color: var(--light-aquamarine);
+                background-color: var(--light-aquamarine);
             }
         }
     }
