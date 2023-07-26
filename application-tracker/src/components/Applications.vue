@@ -47,13 +47,20 @@
     const applicationFields = ref(applicationFieldsArray)
     const searchBar = ref('')
 
-    function filteredApplications() {
-        return exampleApplications.value.filter((app) => {
-                for ( const [key , value] of Object.entries(app)) {
-                    console.log(value)
+    function filteredApplications() : Application[] {
+        return exampleApplications.value.filter(filterAppsHelper)
+    }
+
+    function filterAppsHelper(app: Application) : boolean {
+        for ( const [key , value] of Object.entries(app)) {
+            //only dealing with string values rn TODO: fix
+            if (typeof value === 'string') {
+                if (value.toLowerCase().includes(searchBar.value.toLowerCase())) {
+                    return true
                 }
             }
-        )
+        }
+        return false
     }
 
 </script>
