@@ -49,11 +49,8 @@
 
     function filteredApplications() {
         return exampleApplications.value.filter((app) => {
-            let property:keyof Application
-                for (const property in app) {
-                    if (typeof property === 'string') {
-                        app[property].toLowerCase()
-                    }
+                for ( const [key , value] of Object.entries(app)) {
+                    console.log(value)
                 }
             }
         )
