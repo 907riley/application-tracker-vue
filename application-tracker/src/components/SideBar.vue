@@ -29,13 +29,17 @@
             </button>
         </div>
         <div class="menu">
-            <router-link class="menu-button" to="/" @click="CloseMenu">
+            <router-link class="menu-button" to="/home/applications" @click="CloseMenu">
                 <span class="material-symbols-outlined">home</span>
                 <span class="menu-text">Home</span>
             </router-link>
-            <router-link class="menu-button" to="/stats" @click="CloseMenu">
+            <router-link class="menu-button" to="/home/stats" @click="CloseMenu">
                 <span class="material-symbols-outlined">monitoring</span>
                 <span class="menu-text">Stats</span>
+            </router-link>
+            <router-link class="menu-button" to="/home/profile" @click="CloseMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="menu-text">Profile</span>
             </router-link>
         </div>
 
