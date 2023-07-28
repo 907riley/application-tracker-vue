@@ -1,14 +1,7 @@
 <template>
-    <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
-    <select id="hunts" class="font-genos text-3xl font-bold px-5 flex-1">
-        <option value="Post Grad">Post Grad</option>
-        <option value="Second Job">Second Job</option>
-        <option value="Game Dev">Game Dev</option>
-    </select>
+
 </template>
 
 <style lang="scss">
-    select {
-        background-color: var(--light-aquamarine);
-    }
+
 </style>

@@ -1,14 +1,24 @@
 <script setup lang="ts">
     import DropDownVue from './DropDown.vue';
+
+    function addHunt() {
+        console.log("adding hunt")
+
+    }
 </script>
 
 <template>
         <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
             <div class="border-2 dropdown-wrapper flex">
-                <DropDownVue></DropDownVue>
+                    <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
+                <select id="hunts" class="font-genos text-3xl font-bold px-5 flex-1">
+                    <option value="Post Grad">Post Grad</option>
+                    <option value="Second Job">Second Job</option>
+                    <option value="Game Dev">Game Dev</option>
+                </select>
             </div>
             <div class="vertical-plus-wrapper">
-                <span class="material-symbols-outlined">add</span>
+                <button @click="$emit('addHunt')" class="material-symbols-outlined">add</button>
             </div>
         </div>
 </template>
@@ -31,6 +41,10 @@
     .material-symbols-outlined {
         font-size: 3rem;
         flex: 1 1 0;
+    }
+
+    select {
+        background-color: var(--light-aquamarine);
     }
 
 </style>
