@@ -29,15 +29,15 @@
             </button>
         </div>
         <div class="menu">
-            <router-link class="menu-button" to="/home/applications" @click="CloseMenu">
+            <router-link class="menu-button" :to="{ name: 'Applications'}" @click="CloseMenu">
                 <span class="material-symbols-outlined">home</span>
                 <span class="menu-text">Home</span>
             </router-link>
-            <router-link class="menu-button" to="/home/stats" @click="CloseMenu">
+            <router-link class="menu-button" :to="{ name: 'Stats'}" @click="CloseMenu">
                 <span class="material-symbols-outlined">monitoring</span>
                 <span class="menu-text">Stats</span>
             </router-link>
-            <router-link class="menu-button" to="/home/profile" @click="CloseMenu">
+            <router-link class="menu-button" :to="{ name: 'Profile'}" @click="CloseMenu">
                 <span class="material-symbols-outlined">person</span>
                 <span class="menu-text">Profile</span>
             </router-link>
@@ -46,7 +46,7 @@
         <div class="flex"></div>
 
         <div class="menu">
-            <router-link class="menu-button" to="/settings" @click="CloseMenu">
+            <router-link class="menu-button" :to="{ name: 'Settings'}" @click="CloseMenu">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="menu-text">Settings</span>
             </router-link>

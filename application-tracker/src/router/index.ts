@@ -1,6 +1,8 @@
-import { createRouter, createWebHistory} from 'vue-router'
-import { createAuthGuard } from '@auth0/auth0-vue'
+import { createRouter, createWebHistory, START_LOCATION, type NavigationGuardNext, type RouteLocationNormalized} from 'vue-router'
 import Login from '../components/Login.vue'
+import { supabase } from '@/clients/supabase'
+
+let localUser
 
 const router = createRouter({
     history: createWebHistory(),
@@ -14,28 +16,55 @@ const router = createRouter({
             path: '/home',
             name: 'Home',
             component: () => import('../components/ApplicationTracker.vue'),
+            meta: { requiresAuth: true },
             children: [
                 {
                     path: 'applications',
                     name: 'Applications',
                     component: () => import('../components/Applications.vue'),
-                    beforeEnter: createAuthGuard()   
                 },
                 {
                     path: 'stats',
                     name: 'Stats',
                     component: () => import('../components/Stats.vue'),
-                    beforeEnter: createAuthGuard()  
                 },
                 {
                     path: 'profile',
-                    name: 'profile',
+                    name: 'Profile',
                     component: () => import('../components/Profile.vue'),
-                    beforeEnter: createAuthGuard()  
+                },
+                {
+                    path: 'settings',
+                    name: 'Settings',
+                    component: () => import('../components/Settings.vue'),
                 }
             ]
         }
     ]
+})
+
+
+// getUser
+async function getUser(to: RouteLocationNormalized, next: NavigationGuardNext) {
+    localUser = await supabase.auth.getSession()
+    if (localUser.data.session == null) {
+        next('/unauthorized')
+    } else if (to.name === 'Home') {
+        next({name: 'Applications'})
+    } else {
+        next()
+    }
+}
+
+// auth requirements
+router.beforeEach((to, from, next) => {
+    console.log(`TO: ${JSON.stringify(to)} FROM: ${JSON.stringify(from)}`)
+
+    if (to.meta.requiresAuth) {
+        getUser(to, next)
+    } else {
+        next()
+    }
 })
 
 export default router

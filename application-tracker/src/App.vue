@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import Login from './components/Login.vue'
+    import Login from './components/Login.vue'
+    import ApplicationTracker from './components/ApplicationTracker.vue'
 </script>
 
 <template>
-  <RouterView></RouterView>
+    <RouterView></RouterView>
 </template>
 
 <style lang="scss">
