@@ -1,19 +1,23 @@
 <template>
     <div>
         <h2>User Profile</h2>
-        <button @click="login" class="bg-blue-500">Log in</button>
+        <!-- <button @click="login" class="bg-blue-500">Log in</button>
         <pre v-if="isAuthenticated">
             <code>{{ user }}</code>
-        </pre>
+        </pre> -->
+        {{ account?.data.session.user.email }}
     </div>
 </template>
 
 <script setup lang="ts">
-    import { useAuth0 } from '@auth0/auth0-vue';
+    import { supabase } from '@/clients/supabase';
+    import { ref } from 'vue'
 
-    const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+    const account = ref()
+    getSession()
 
-    const login = () => {
-        loginWithRedirect()
+    async function getSession() {
+        account.value = await supabase.auth.getSession()
     }
+
 </script>
