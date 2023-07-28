@@ -57,7 +57,6 @@
                         <button @click="switchMode" class="flex-1">Sign Up</button>
                     </div>
                     <button @click="seeCurrentUser">see user</button>
-                    <button @click="logout">logout</button>
                 </div>
             </div>
         </div>
@@ -125,17 +124,6 @@
         console.log(localUser)
     }
 
-    // logout
-    async function logout() {
-        console.log("logout")
-        const { error } = await supabase.auth.signOut()
-
-        if (error) {
-            console.log(error)
-        } else {
-            console.log("logout has been good")
-        }
-    }
 </script>
 
 <style lang="scss" scoped>
