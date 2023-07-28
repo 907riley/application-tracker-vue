@@ -113,7 +113,7 @@
             console.log(error)
         } else {
             console.log(data)
-            router.push({ path: 'Applications', replace: true })
+            router.push({ name: 'Applications', replace: true })
         }
     }
 

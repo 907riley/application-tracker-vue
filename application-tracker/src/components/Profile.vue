@@ -33,7 +33,7 @@
             console.log(error)
         } else {
             console.log("logout has been good")
-            router.push({ path: 'Login', replace: true })
+            router.push({ name: 'Login', replace: true })
         }
     }
 

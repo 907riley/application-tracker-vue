@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, START_LOCATION, type NavigationGuardNext} from 'vue-router'
+import { createRouter, createWebHistory, START_LOCATION, type NavigationGuardNext, type RouteLocationNormalized} from 'vue-router'
 import Login from '../components/Login.vue'
 import { supabase } from '@/clients/supabase'
 
@@ -8,12 +8,12 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/login',
+            path: '/',
             name: 'Login',
             component: Login
         },
         {
-            path: '/',
+            path: '/home',
             name: 'Home',
             component: () => import('../components/ApplicationTracker.vue'),
             meta: { requiresAuth: true },
@@ -45,10 +45,12 @@ const router = createRouter({
 
 
 // getUser
-async function getUser(next: NavigationGuardNext) {
+async function getUser(to: RouteLocationNormalized, next: NavigationGuardNext) {
     localUser = await supabase.auth.getSession()
     if (localUser.data.session == null) {
         next('/unauthorized')
+    } else if (to.name === 'Home') {
+        next({name: 'Applications'})
     } else {
         next()
     }
@@ -56,16 +58,10 @@ async function getUser(next: NavigationGuardNext) {
 
 // auth requirements
 router.beforeEach((to, from, next) => {
-    if (from === START_LOCATION) {
-        to.name === 'Login'
-    }
-
-    if (from.name === 'Login' && to.name != 'Applications') {
-        getUser(next)
-    }
+    console.log(`TO: ${JSON.stringify(to)} FROM: ${JSON.stringify(from)}`)
 
     if (to.meta.requiresAuth) {
-        getUser(next)
+        getUser(to, next)
     } else {
         next()
     }
