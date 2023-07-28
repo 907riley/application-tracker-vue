@@ -16,9 +16,6 @@
                     </p>
                 </div>
                 <TopControlBar></TopControlBar>
-                <div>
-                    <!-- <button @click="logoutUser" class="bg-white">Log out</button> -->
-                </div>
             </div>
             <div class="content-wrapper">
                 <RouterView></RouterView>
