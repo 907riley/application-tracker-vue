@@ -21,6 +21,7 @@ export interface Database {
           location: string | null
           pay: number | null
           response: boolean | null
+          user_id: string | null
         }
         Insert: {
           application_link?: string | null
@@ -33,6 +34,7 @@ export interface Database {
           location?: string | null
           pay?: number | null
           response?: boolean | null
+          user_id?: string | null
         }
         Update: {
           application_link?: string | null
@@ -45,6 +47,7 @@ export interface Database {
           location?: string | null
           pay?: number | null
           response?: boolean | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -52,6 +55,12 @@ export interface Database {
             columns: ["hunt_title"]
             referencedRelation: "Hunts"
             referencedColumns: ["hunt_title"]
+          },
+          {
+            foreignKeyName: "Applications_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
