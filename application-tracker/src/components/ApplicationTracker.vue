@@ -4,35 +4,102 @@
     import TopControlBar from './TopControlBox.vue'
     import SideBar from './SideBar.vue'
 
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
+    import { supabase } from '@/clients/supabase';
 
     const addingHunt = ref(false)
+
     const jobTypes = ref([
-        "Internship",
-        "Junior",
-        "Mid",
-        "Senior"
+        { value: "Internship" },
+        { value: "Junior" },
+        { value: "Mid" },
+        { value: "Senior" }
     ])
 
-    const huntTitle = ref('')
-    const goalSalary = ref('')
-    const goalJobType = ref('')
-    const goalLocation = ref('')
-    const goalTechStack = ref('')
-    const goalJobTitle = ref('')
+    const huntTitle = ref('First Real Job!')
+    const goalSalary = ref(60000)
+    const goalJobType = ref(jobTypes.value[0].value)
+    const goalLocation = ref('Remote')
+    const goalTechStack = ref('Vue.js')
+    const goalJobTitle = ref('Junior Software Dev')
+
+    const localHunts = ref()
+    const currentHunt = ref()
+
+    onMounted(() => {
+        getHunts()
+    })
+
+    async function getHunts() {
+        const localUser = await supabase.auth.getSession()
+        const localUserId = localUser.data.session?.user.id
+        console.log(localUserId)
+
+        // get the hunts
+        if (localUserId) {
+            let { data: Hunts, error } = await supabase
+                .from('Hunts')
+                .select("hunt_title")
+
+            if (error) {
+                console.log(error)
+            }
+
+            if (Hunts) {
+                localHunts.value = Hunts
+                currentHunt.value = Hunts[0].hunt_title
+                console.log(Hunts)
+                console.log(localHunts.value)
+            }
+        }
+    }
 
     function displayHuntForm() {
         console.log("displaying hunt form")
         addingHunt.value = true
     }
 
-    function submitJobHunt() {
+    async function submitJobHunt() {
         console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
+
+        const localUser = await supabase.auth.getSession()
+        const localUserId = localUser.data.session?.user.id
+        console.log(localUserId)
+
+        if (localUserId) {
+            const { data: Hunts, error } = await supabase
+            .from('Hunts')
+            .insert([
+                {
+                    user_id: localUserId,
+                    hunt_title: huntTitle.value,
+                    goal_salary: goalSalary.value,
+                    goal_job_title: goalJobTitle.value,
+                    goal_location: goalLocation.value,
+                    goal_tech_stack: goalTechStack.value,
+                    goal_job_type: goalJobTitle.value
+                }
+            ])
+            .select('hunt_title')
+            console.log(`Right after inserting: ${JSON.stringify(Hunts)}`)
+            if (error) {
+                if (error.code = '23505') {
+                    console.log('you\'ve already created a hunt with this title')
+                } else {
+                    console.log(error)
+                }
+            } else {
+                addingHunt.value = false
+                localHunts.value.push(Hunts[0])
+                currentHunt.value = Hunts[0].hunt_title
+            }
+        }
+
     }
 </script>
 
 <template>
-    <div class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
+    <div v-if="addingHunt" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
         <div class="hunt-form-wrapper flex flex-col bg-white font-genos">
             <div class="title-wrapper text-white font-bold text-5xl flex justify-center p-5 border-b-2 border-black">
                 <span>New Job Hunt</span>
@@ -59,7 +126,7 @@
                         <div class="flex-1 "></div>
                         <!-- <input id="goal_job_type" type="text" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/> -->
                         <select v-model="goalJobType" class="p-1 px-2 bg-zinc-300 border border-black place-self-end">
-                            <option v-for="job in jobTypes" :value="job.value">{{job}}</option>
+                            <option v-for="job in jobTypes" :key="job.value" :value="job.value" >{{job.value}}</option>
                         </select>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
@@ -93,7 +160,7 @@
                         {{$route.name}}
                     </p>
                 </div>
-                <TopControlBar @add-hunt="displayHuntForm"></TopControlBar>
+                <TopControlBar @add-hunt="displayHuntForm" :local-hunts="localHunts" :current-hunt="currentHunt"></TopControlBar>
             </div>
             <div class="content-wrapper">
                 <RouterView></RouterView>
