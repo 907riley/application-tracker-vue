@@ -47,6 +47,8 @@
     const applicationFields = ref(applicationFieldsArray)
     const searchBar = ref('')
 
+    const props = defineProps(['currentHunt'])
+
     function filteredApplications() : Application[] {
         return exampleApplications.value.filter(filterAppsHelper)
     }
