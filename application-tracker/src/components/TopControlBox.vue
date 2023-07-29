@@ -2,8 +2,13 @@
     import DropDownVue from './DropDown.vue';
     import { supabase } from '@/clients/supabase';
     import { ref, onMounted } from 'vue';
+    import { storeToRefs } from 'pinia';
 
-    const props = defineProps(['localHunts', 'currentHunt'])
+    import { useCurrentHuntStore } from '@/stores/currentHunt';
+
+    const currentHuntStore = storeToRefs(useCurrentHuntStore())
+
+    const props = defineProps(['localHunts'])
 
     // onMounted(() => {
     //     getHunts()
@@ -33,13 +38,14 @@
     //     }
     // }
 
+
 </script>
 
 <template>
         <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
             <div class="border-2 dropdown-wrapper flex">
                     <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
-                <select id="hunts" :value="currentHunt" class="font-genos text-3xl font-bold px-5 flex-1">
+                <select id="hunts" v-model="currentHuntStore.currentHunt.value" class="font-genos text-3xl font-bold px-5 flex-1">
                     <option v-for="hunt in localHunts" :key="hunt.hunt_title" :value="hunt.hunt_title">{{hunt.hunt_title}}</option>
                     <!-- <option value="Post Grad">Post Grad</option>
                     <option value="Second Job">Second Job</option>

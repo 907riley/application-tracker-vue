@@ -6,8 +6,13 @@
 
     import { ref, onMounted } from 'vue';
     import { supabase } from '@/clients/supabase';
+    import { useCurrentHuntStore } from '@/stores/currentHunt';
+    import { storeToRefs } from 'pinia';
 
     const addingHunt = ref(false)
+
+    const store = useCurrentHuntStore()
+    const { currentHunt } = storeToRefs(store)
 
     const jobTypes = ref([
         { value: "Internship" },
@@ -24,7 +29,6 @@
     const goalJobTitle = ref('Junior Software Dev')
 
     const localHunts = ref()
-    const currentHunt = ref()
 
     onMounted(() => {
         getHunts()
@@ -163,7 +167,7 @@
                 <TopControlBar @add-hunt="displayHuntForm" :local-hunts="localHunts" :current-hunt="currentHunt"></TopControlBar>
             </div>
             <div class="content-wrapper">
-                <RouterView></RouterView>
+                <RouterView ></RouterView>
             </div>
         </main>
     </div>

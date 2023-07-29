@@ -1,5 +1,10 @@
 <script setup lang="ts">
     import { ref, type App, type Ref} from 'vue'
+    import { useCurrentHuntStore } from '@/stores/currentHunt';
+    import { storeToRefs } from 'pinia';
+
+    const store = useCurrentHuntStore()
+    const { currentHunt } = storeToRefs(store)
 
     interface Application {
         title: string;
@@ -47,7 +52,7 @@
     const applicationFields = ref(applicationFieldsArray)
     const searchBar = ref('')
 
-    const props = defineProps(['currentHunt'])
+    // const props = defineProps(['currentHunt'])
 
     function filteredApplications() : Application[] {
         return exampleApplications.value.filter(filterAppsHelper)
@@ -126,6 +131,7 @@
                 </div>
             </div>
         </div>
+        {{ currentHunt }}
     </div>
 </template>
 
