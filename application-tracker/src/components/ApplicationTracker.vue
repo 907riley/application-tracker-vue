@@ -13,6 +13,7 @@
 
     const store = useCurrentHuntStore()
     const { currentHunt } = storeToRefs(store)
+    const { setCurrentHunt } = store
 
     const jobTypes = ref([
         { value: "Internship" },
@@ -51,7 +52,7 @@
 
             if (Hunts) {
                 localHunts.value = Hunts
-                currentHunt.value = Hunts[0].hunt_title
+                setCurrentHunt(Hunts[0].hunt_title)
                 console.log(Hunts)
                 console.log(localHunts.value)
             }
@@ -95,7 +96,7 @@
             } else {
                 addingHunt.value = false
                 localHunts.value.push(Hunts[0])
-                currentHunt.value = Hunts[0].hunt_title
+                setCurrentHunt(Hunts[0].hunt_title)
             }
         }
 
@@ -164,7 +165,7 @@
                         {{$route.name}}
                     </p>
                 </div>
-                <TopControlBar @add-hunt="displayHuntForm" :local-hunts="localHunts" :current-hunt="currentHunt"></TopControlBar>
+                <TopControlBar @add-hunt="displayHuntForm" :local-hunts="localHunts"></TopControlBar>
             </div>
             <div class="content-wrapper">
                 <RouterView ></RouterView>

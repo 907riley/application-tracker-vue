@@ -6,46 +6,25 @@
 
     import { useCurrentHuntStore } from '@/stores/currentHunt';
 
-    const currentHuntStore = storeToRefs(useCurrentHuntStore())
+    const store = useCurrentHuntStore()
+
+    const { currentHunt } = storeToRefs(store)
+    const { setCurrentHunt } = store
 
     const props = defineProps(['localHunts'])
 
-    // onMounted(() => {
-    //     getHunts()
-    // })
+    defineEmits(['click', 'addHunt'])
 
-    // async function getHunts() {
-    //     const localUser = await supabase.auth.getSession()
-    //     const localUserId = localUser.data.session?.user.id
-    //     console.log(localUserId)
-
-    //     // get the hunts
-    //     if (localUserId) {
-    //         let { data: Hunts, error } = await supabase
-    //             .from('Hunts')
-    //             .select("hunt_title")
-
-    //         if (error) {
-    //             console.log(error)
-    //         }
-
-    //         if (Hunts) {
-    //             localHunts.value = Hunts
-    //             currentHunt.value = Hunts[0].hunt_title
-    //             console.log(Hunts)
-    //             console.log(localHunts.value)
-    //         }
-    //     }
-    // }
-
-
+    function changingHunt() {
+        setCurrentHunt(currentHunt.value) 
+    }
 </script>
 
 <template>
         <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
             <div class="border-2 dropdown-wrapper flex">
                     <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
-                <select id="hunts" v-model="currentHuntStore.currentHunt.value" class="font-genos text-3xl font-bold px-5 flex-1">
+                <select id="hunts" @change="changingHunt()" v-model="currentHunt" class="font-genos text-3xl font-bold px-5 flex-1">
                     <option v-for="hunt in localHunts" :key="hunt.hunt_title" :value="hunt.hunt_title">{{hunt.hunt_title}}</option>
                     <!-- <option value="Post Grad">Post Grad</option>
                     <option value="Second Job">Second Job</option>
@@ -56,6 +35,7 @@
                 <button @click="$emit('addHunt')" class="material-symbols-outlined">add</button>
             </div>
         </div>
+        {{ currentHunt }}
 </template>
 
 <style lang="scss" scoped>
