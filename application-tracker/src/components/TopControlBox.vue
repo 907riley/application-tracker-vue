@@ -35,7 +35,6 @@
                 <button @click="$emit('addHunt')" class="material-symbols-outlined">add</button>
             </div>
         </div>
-        {{ currentHunt }}
 </template>
 
 <style lang="scss" scoped>

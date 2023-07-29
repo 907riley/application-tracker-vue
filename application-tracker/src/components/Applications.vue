@@ -2,6 +2,7 @@
     import { ref, type App, type Ref} from 'vue'
     import { useCurrentHuntStore } from '@/stores/currentHunt';
     import { storeToRefs } from 'pinia';
+import { supabase } from '@/clients/supabase';
 
     const store = useCurrentHuntStore()
     const { currentHunt } = storeToRefs(store)
@@ -51,6 +52,7 @@
     const exampleApplications: Ref<Application[]> = ref(exampleApplicationsJSON)
     const applicationFields = ref(applicationFieldsArray)
     const searchBar = ref('')
+    const addingApplication = ref(false)
 
     // const props = defineProps(['currentHunt'])
 
@@ -70,9 +72,106 @@
         return false
     }
 
+    const addApplicationTitle = ref('default title')
+    const addApplicationCompany = ref('Netflix')
+    const addApplicationLocation = ref('Remote')
+    const addApplicationPay = ref(65000)
+    const addApplicationDateApplied = ref(new Date().toISOString().slice(0, 10))
+    const addApplicationResponse = ref(false)
+    const addApplicationLink = ref('exampleLink.com')
+
+
+    async function submitNewApplication () {
+        console.log("done with new app")
+
+        const localUser = await supabase.auth.getSession()
+        const localUserId = localUser.data.session?.user.id
+        console.log(localUserId)
+
+        if (localUserId) {
+            const { data, error } = await supabase
+            .from('Applications')
+            .insert([
+                {
+                    user_id: localUserId,
+                    hunt_title: currentHunt.value,
+                    job_title: addApplicationTitle.value,
+                    company: addApplicationCompany.value,
+                    location: addApplicationLocation.value,
+                    pay: addApplicationPay.value,
+                    applied_at: addApplicationDateApplied.value,
+                    response: addApplicationResponse.value,
+                    application_link: addApplicationLink.value
+                }
+            ])
+
+            console.log(`Right after inserting: ${JSON.stringify(data)}`)
+            if (error) {
+                console.log(error)
+            } else {
+                console.log("successfull added app")
+                addingApplication.value = false
+            }
+        }
+
+    }
+
+    function addApplication() {
+        addingApplication.value = true
+    }
+
 </script>
 
 <template>
+    <div v-if="addingApplication" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
+        <div class="application-form-wrapper flex flex-col bg-white font-genos">
+            <div class="title-wrapper text-white font-bold text-5xl flex justify-center p-5 border-b-2 border-black">
+                <span>New Application</span>
+            </div>
+            <div class="form-content-wrapper flex flex-col gap-8 m-10">
+                <div class="information-wrapper gap-6 flex flex-col text-3xl">
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_title" class="place-self-start"> Title: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_title" type="text" v-model="addApplicationTitle" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_company" class="place-self-start"> Company: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_company" type="text" v-model="addApplicationCompany" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_location" class="place-self-start"> Location: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_location" type="text" v-model="addApplicationLocation" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_pay" class="place-self-start"> Pay: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_pay" type="number" v-model="addApplicationPay" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_date_applied" class="place-self-start"> Date Applied: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_date_applied" type="date" v-model="addApplicationDateApplied" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_response" class="place-self-start"> Response: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_response" type="checkbox" v-model="addApplicationResponse" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                    <div class="flex flex-row bg-white gap-4">
+                        <label for="add_application_link" class="place-self-start"> Application Link: </label>
+                        <div class="flex-1 "></div>
+                        <input id="add_application_link" type="text" v-model="addApplicationLink" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                    </div>
+                </div>
+                <div class="button-wrapper flex border-2 border-black">
+                    <button @click="submitNewApplication" id="done-button" class="flex-1 p-2 font-bold text-3xl">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="h-fit p-5 flex-1 flex flex-col">
         <div class="search-add-bar-wrapper h-32 flex flex-row">
             <div class="search-bar-wrapper my-auto">
@@ -80,7 +179,7 @@
             </div>
             <div class="flex-1"></div>
             <div class="add-application-button-wrapper border-2 border-black w-fit my-auto">
-                <button class="add-application-button text-white font-genos text-5xl p-2">Add Application</button>
+                <button @click="addApplication" class="add-application-button text-white font-genos text-5xl p-2">Add Application</button>
             </div>
         </div>
         <div class="information-section-wrapper flex-1 flex flex-col">
@@ -131,12 +230,25 @@
                 </div>
             </div>
         </div>
-        {{ currentHunt }}
     </div>
 </template>
 
 
 <style lang="scss">
+    #done-button {
+        background-color: var(--light-pink);
+    }
+
+    .title-wrapper {
+        background-color: var(--dark-aquamarine);
+
+    }
+
+    .application-form-wrapper {
+        box-shadow: 0px 0px 10px black;
+    }
+
+
     .add-application-button {
         background-color: var(--dark-aquamarine);
     }
