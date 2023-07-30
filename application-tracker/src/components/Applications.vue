@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, type App, type Ref, onMounted} from 'vue'
+    import { ref, type App, type Ref, onMounted, watchEffect, watch} from 'vue'
     import { useCurrentHuntStore } from '@/stores/currentHunt';
     import { storeToRefs } from 'pinia';
 import { supabase } from '@/clients/supabase';
@@ -124,13 +124,14 @@ import { supabase } from '@/clients/supabase';
     async function getApplications() {
         const localUser = await supabase.auth.getSession()
         const localUserId = localUser.data.session?.user.id
-        console.log(localUserId)
+        console.log(currentHunt.value)
 
-        // get the hunts
+        // get the applications
         if (localUserId) {
             let { data: Application, error } = await supabase
                 .from('Applications')
                 .select("*")
+                .eq('hunt_title', currentHunt.value)
 
             if (error) {
                 console.log(error)
@@ -144,6 +145,11 @@ import { supabase } from '@/clients/supabase';
     }
 
     onMounted(() => {
+        getApplications()
+    })
+
+    watch(currentHunt, async () => {
+        console.log("watch effect happening")
         getApplications()
     })
 
