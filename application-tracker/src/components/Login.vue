@@ -13,16 +13,16 @@
                     </div>
                     <div v-if="signingUp" class="first-name-wrapper flex flex-col gap-1">
                             <label class="text-2xl" for="firstName">First Name (optional):</label>
-                            <input id="firstName" type='text' v-model="firstName" class="bg-zinc-300 text-2xl p-1 px-2 border-black border"/>
+                            <input id="firstName" type='text' v-model="storeUser.firstName" class="bg-zinc-300 text-2xl p-1 px-2 border-black border"/>
                         </div>
                     <div class="text-box-wrapper flex flex-col gap-4 mb-4">
                         <div class="email-wrapper flex flex-col gap-1">
                             <label class="text-2xl" for="email">Email</label>
-                            <input id="email" type='email' v-model="email" class="bg-zinc-300 text-2xl p-1 px-2 font-normal border-black border"/>
+                            <input id="email" type='email' v-model="storeUser.email" class="bg-zinc-300 text-2xl p-1 px-2 font-normal border-black border"/>
                         </div>
                         <div class="password-wrapper flex flex-col gap-1">
                             <label class="text-2xl" for="password">Password</label>
-                            <input id="password" type='password' v-model="password" class="bg-zinc-300 text-2xl p-1 px-2 border-black border"/>
+                            <input id="password" type='password' v-model="storeUser.password" class="bg-zinc-300 text-2xl p-1 px-2 border-black border"/>
                             <span v-if="!signingUp" class="forgot-password">
                                 Forgot Password?
                             </span>
@@ -67,31 +67,23 @@
     import { ref } from 'vue'
     import { supabase } from '../clients/supabase'
     import router from '../router'
+    import { useUserStore } from '@/stores/user';
 
-    const email = ref('')
-    const password = ref('')
+    const storeUser = useUserStore()
+
+    // const email = ref('')
+    // const password = ref('')
     const confirmPassword = ref('')
-    const rememberMe = ref(false)
-    const firstName = ref('')
+    const rememberMe = ref(true)
 
     const signingUp = ref(false)
 
     // create account
     async function createAccount() {
-        const { data, error } = await supabase.auth.signUp({
-            email: email.value,
-            password: password.value,
-            options: {
-                data: {
-                    first_name: firstName.value
-                }
-            }
-        })
-
-        if (error) {
-            console.log(error)
+        await storeUser.createAccount()
+        if (Object.keys(storeUser.error).length !== 0) {
+            console.log("error creating account")
         } else {
-            console.log(data)
             signingUp.value = false
         }
     }
@@ -102,17 +94,26 @@
     }
 
     // login
-    async function login() {
-        console.log("login")
-        const { data, error }  = await supabase.auth.signInWithPassword({
-            email: email.value,
-            password: password.value
-        })
+    // async function login() {
+    //     console.log("login")
+    //     const { data, error }  = await supabase.auth.signInWithPassword({
+    //         email: email.value,
+    //         password: password.value
+    //     })
 
-        if (error) {
-            console.log(error)
+    //     if (error) {
+    //         console.log(error)
+    //     } else {
+    //         console.log(data)
+    //         router.push({ name: 'Applications', replace: true })
+    //     }
+    // }
+
+    async function login() {
+        await storeUser.login()
+        if (Object.keys(storeUser.error).length !== 0) {
+            console.log("bad login")
         } else {
-            console.log(data)
             router.push({ name: 'Applications', replace: true })
         }
     }
