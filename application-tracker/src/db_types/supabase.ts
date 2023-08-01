@@ -17,7 +17,7 @@ export interface Database {
           created_at: string | null
           hunt_id: number
           id: string
-          job_title: string | null
+          job_title: string
           location: string | null
           pay: number | null
           response: boolean | null
@@ -30,7 +30,7 @@ export interface Database {
           created_at?: string | null
           hunt_id: number
           id?: string
-          job_title?: string | null
+          job_title?: string
           location?: string | null
           pay?: number | null
           response?: boolean | null
@@ -43,7 +43,7 @@ export interface Database {
           created_at?: string | null
           hunt_id?: number
           id?: string
-          job_title?: string | null
+          job_title?: string
           location?: string | null
           pay?: number | null
           response?: boolean | null

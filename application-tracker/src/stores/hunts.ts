@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { supabase } from '@/clients/supabase';
 import { useUserStore } from './user';
 import { type Database } from '@/db_types/supabase';
+import { useStorage } from '@vueuse/core'
 
 const userStore = useUserStore()
 

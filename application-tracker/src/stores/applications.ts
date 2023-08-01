@@ -59,7 +59,7 @@ export const useApplicationStore = defineStore('applications', {
                 }
             }
         },
-        async submitNewApplication(jobTitle: string, company: string, location: string, pay: number, appliedAt: string, response: boolean, applicationLink: string ) {
+        async addApplication(jobTitle: string, company: string | null, location: string | null, pay: number | null, appliedAt: string | null, response: boolean | null, applicationLink: string | null) {
             const localUserId = storeUser.userId
             const currentHunt = storeHunts.currentHunt
 
@@ -112,6 +112,50 @@ export const useApplicationStore = defineStore('applications', {
                 })
                 this.error = {}
             }
+        },
+        async updateApplication(id: string, jobTitle: string, company: string | null, location: string | null, pay: number | null, appliedAt: string | null, response: boolean | null, applicationLink: string | null) {
+            const { data, error } = await supabase
+                .from('Applications')
+                .update({
+                    job_title: jobTitle,
+                    company: company,
+                    location: location,
+                    pay: pay,
+                    applied_at: appliedAt,
+                    response: response,
+                    application_link: applicationLink
+                })
+                .eq('id', id)
+                .select('*')
+            
+            if (error) {
+                this.error = {}
+                console.log('error in updating application')
+            } else {
+                console.log('succesfully updated')
+                this.applications = this.applications.map((app) => {
+                    if (app.id === id) {
+                        app.job_title = jobTitle
+                        app.company = company
+                        app.location = location
+                        app.pay = pay
+                        app.applied_at = appliedAt
+                        app.response = response
+                        app.application_link = applicationLink
+                    }
+                    return app
+                })
+                this.error = {}
+            }
+        },
+        // FIXME: this is jank
+        getSingleApplication(searchId: string): Application {
+            return this.applications.filter((app) => {
+                if (app.id === searchId) {
+                    return true
+                }
+                return false
+            })[0]
         }
     }
 })

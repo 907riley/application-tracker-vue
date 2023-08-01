@@ -18,11 +18,73 @@
 
     const applicationsArray = ref()
     const applicationFields = ref(applicationFieldsArray)
+
     const searchBar = ref('')
     const addingApplication = ref(false)
+    // TODO: these vars are coupled, make them so
+    const updatingApplication = ref(false)
+    const updatingApplicationId = ref("")
 
     type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
+    const jobTitle = ref<string>('default title')
+    const company = ref<string | null>('Netflix')
+    const location = ref<string | null>('Remote')
+    const pay = ref<number | null>(65000)
+    const dateApplied = ref<string | null>(new Date().toISOString().slice(0, 10))
+    const response = ref<boolean | null>(false)
+    const applicationLink = ref<string | null>('exampleLink.com')
+
+    onMounted(() => {
+        getApplications()
+    })
+
+    watch(() => storeHunts.currentHunt, async () => {
+        console.log("watch effect happening")
+        await getApplications()
+    })
+    
+
+    function addApplication() {
+        addingApplication.value = true
+    }
+
+    function updateApplication(updateId: string) {
+        const currApplication = storeApplications.getSingleApplication(updateId)
+
+        jobTitle.value = currApplication.job_title
+        company.value = currApplication.company
+        location.value = currApplication.location
+        pay.value = currApplication.pay
+        dateApplied.value = currApplication.applied_at
+        response.value = currApplication.response
+        applicationLink.value = currApplication.application_link
+
+        updatingApplication.value = true
+        updatingApplicationId.value = updateId
+    }
+
+    async function submitUpdatedApplication() {
+        await storeApplications.updateApplication(
+            updatingApplicationId.value,
+            jobTitle.value,
+            company.value,
+            location.value,
+            pay.value,
+            dateApplied.value,
+            response.value,
+            applicationLink.value
+        )
+
+        if (Object.keys(storeApplications.error).length !== 0) {
+            console.log('error updating application')
+        } else {
+            console.log('successfully updated application')
+            updatingApplication.value = false
+            updatingApplicationId.value = ''
+            applicationsArray.value = storeApplications.applications
+        }
+    }
 
     function searchApplication() : Application[] {
         if (storeApplications.applications && storeApplications.applications.length > 0) {
@@ -41,32 +103,8 @@
         return []
     }
 
-    const jobTitle = ref('default title')
-    const company = ref('Netflix')
-    const location = ref('Remote')
-    const pay = ref(65000)
-    const dateApplied = ref(new Date().toISOString().slice(0, 10))
-    const response = ref(false)
-    const applicationLink = ref('exampleLink.com')
-
-    onMounted(() => {
-        getApplications()
-    })
-
-    watch(() => storeHunts.currentHunt, async () => {
-        console.log("watch effect happening")
-        await getApplications()
-    })
-    
-
-    function addApplication() {
-        addingApplication.value = true
-    }
-
-
-
     async function submitNewApplication() {
-        await storeApplications.submitNewApplication(
+        await storeApplications.addApplication(
             jobTitle.value,
             company.value,
             location.value,
@@ -99,10 +137,11 @@
 </script>
 
 <template>
-    <div v-if="addingApplication" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
+    <div v-if="addingApplication || updatingApplication" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
         <div class="application-form-wrapper flex flex-col bg-white font-genos">
             <div class="title-wrapper text-white font-bold text-5xl flex justify-center p-5 border-b-2 border-black">
-                <span>New Application</span>
+                <span v-if="addingApplication">New Application</span>
+                <span v-else="updatingApplication">Update Application</span>
             </div>
             <div class="form-content-wrapper flex flex-col gap-8 m-10">
                 <div class="information-wrapper gap-6 flex flex-col text-3xl">
@@ -143,7 +182,8 @@
                     </div>
                 </div>
                 <div class="button-wrapper flex border-2 border-black">
-                    <button @click="submitNewApplication" id="done-button" class="flex-1 p-2 font-bold text-3xl">Done</button>
+                    <button v-if="addingApplication" @click="submitNewApplication" id="done-button" class="flex-1 p-2 font-bold text-3xl">Done</button>
+                    <button v-else @click="submitUpdatedApplication" id="done-button" class="flex-1 p-2 font-bold text-3xl">Save</button>
                 </div>
             </div>
         </div>
@@ -208,7 +248,7 @@
                             <button class="flex-1 hover:text-pink-500">
                                 <span class="material-symbols-outlined">favorite</span>
                             </button>
-                            <button class="flex-1 hover:text-blue-500">
+                            <button class="flex-1 hover:text-blue-500" @click="updateApplication(applications.id)">
                                 <span class="material-symbols-outlined">edit</span>
                             </button>
                             <button class="flex-1 hover:text-red-500" @click="storeApplications.deleteApplication(applications.id)">
