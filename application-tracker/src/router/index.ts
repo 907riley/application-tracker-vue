@@ -58,7 +58,6 @@ async function getUser(to: RouteLocationNormalized, next: NavigationGuardNext) {
 
 // auth requirements
 router.beforeEach((to, from, next) => {
-    console.log(`TO: ${JSON.stringify(to)} FROM: ${JSON.stringify(from)}`)
 
     if (to.meta.requiresAuth) {
         getUser(to, next)

@@ -49,6 +49,13 @@
         addingApplication.value = true
     }
 
+    // TODO: make form have default values somewhere, probably in the store
+    function exitApplicationForm() {
+        addingApplication.value = false
+        updatingApplication.value = false
+        updatingApplicationId.value = ''
+    }
+
     function updateApplication(updateId: string) {
         const currApplication = storeApplications.getSingleApplication(updateId)
 
@@ -140,8 +147,18 @@
     <div v-if="addingApplication || updatingApplication" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
         <div class="application-form-wrapper flex flex-col bg-white font-genos">
             <div class="title-wrapper text-white font-bold text-5xl flex justify-center p-5 border-b-2 border-black">
-                <span v-if="addingApplication">New Application</span>
-                <span v-else="updatingApplication">Update Application</span>
+                <div class="w-24">
+
+                </div>
+                <div class="flex-1 text-center">
+                    <span v-if="addingApplication">New Application</span>
+                    <span v-else="updatingApplication">Update Application</span>
+                </div>
+                <div class="w-24 items-center text-5xl flex flex-row place-content-end">
+                    <button class="w-fit h-fit" @click="exitApplicationForm">
+                        <span id="exit-button" class="material-symbols-outlined w-fit h-fit">close</span>
+                    </button>
+                </div>
             </div>
             <div class="form-content-wrapper flex flex-col gap-8 m-10">
                 <div class="information-wrapper gap-6 flex flex-col text-3xl">
@@ -246,13 +263,13 @@
                     <div class="col-span-1 p-2 border-r border-b border-black flex"> 
                         <div class="flex-1 text-center flex flex-row text-4xl">
                             <button class="flex-1 hover:text-pink-500">
-                                <span class="material-symbols-outlined">favorite</span>
+                                <span class="material-symbols-outlined row-controls">favorite</span>
                             </button>
                             <button class="flex-1 hover:text-blue-500" @click="updateApplication(applications.id)">
-                                <span class="material-symbols-outlined">edit</span>
+                                <span class="material-symbols-outlined row-controls">edit</span>
                             </button>
                             <button class="flex-1 hover:text-red-500" @click="storeApplications.deleteApplication(applications.id)">
-                                <span class="material-symbols-outlined">delete</span>
+                                <span class="material-symbols-outlined row-controls">delete</span>
                             </button>
                         </div>
                     </div>
@@ -286,8 +303,19 @@
         background-color: var(--dark-aquamarine);
     }
 
-    .material-symbols-outlined {
+    .row-controls {
         font-size: 2rem;
+    }
+
+    #exit-button{
+        font-size: 3rem;
+
+        color: var(--light-pink);
+        &:hover {
+            color: var(--bright-pink);
+            font-weight: bold;
+
+        }
     }
 
 </style>
