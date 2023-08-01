@@ -15,7 +15,7 @@ export interface Database {
           applied_at: string | null
           company: string | null
           created_at: string | null
-          hunt_title: string
+          hunt_id: number
           id: string
           job_title: string | null
           location: string | null
@@ -28,7 +28,7 @@ export interface Database {
           applied_at?: string | null
           company?: string | null
           created_at?: string | null
-          hunt_title: string
+          hunt_id: number
           id?: string
           job_title?: string | null
           location?: string | null
@@ -41,7 +41,7 @@ export interface Database {
           applied_at?: string | null
           company?: string | null
           created_at?: string | null
-          hunt_title?: string
+          hunt_id?: number
           id?: string
           job_title?: string | null
           location?: string | null
@@ -51,10 +51,10 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "Applications_hunt_title_fkey"
-            columns: ["hunt_title"]
+            foreignKeyName: "Applications_hunt_id_fkey"
+            columns: ["hunt_id"]
             referencedRelation: "Hunts"
-            referencedColumns: ["hunt_title"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "Applications_user_id_fkey"
@@ -73,6 +73,7 @@ export interface Database {
           goal_salary: number | null
           goal_tech_stack: string | null
           hunt_title: string
+          id: number
           start_date_time: string | null
           user_id: string
         }
@@ -84,6 +85,7 @@ export interface Database {
           goal_salary?: number | null
           goal_tech_stack?: string | null
           hunt_title?: string
+          id?: number
           start_date_time?: string | null
           user_id: string
         }
@@ -95,6 +97,7 @@ export interface Database {
           goal_salary?: number | null
           goal_tech_stack?: string | null
           hunt_title?: string
+          id?: number
           start_date_time?: string | null
           user_id?: string
         }

@@ -8,12 +8,15 @@
     import { supabase } from '@/clients/supabase';
     import { useCurrentHuntStore } from '@/stores/currentHunt';
     import { useUserStore } from '@/stores/user';
+    import { useHuntStore } from '@/stores/hunts';
     import { storeToRefs } from 'pinia';
+import { Stream } from 'stream';
 
     const addingHunt = ref(false)
 
     const storeUser = useUserStore()
-    const storeCurrentHunt = useCurrentHuntStore()
+    // const storeCurrentHunt = useCurrentHuntStore()
+    const storeHunts = useHuntStore()
 
 
     const jobTypes = ref([
@@ -36,72 +39,74 @@
         getHunts()
     })
 
-    async function getHunts() {
-        const localUser = await supabase.auth.getSession()
-        const localUserId = localUser.data.session?.user.id
-        console.log(localUserId)
-
-        // get the hunts
-        if (localUserId) {
-            let { data: Hunts, error } = await supabase
-                .from('Hunts')
-                .select("hunt_title")
-
-            if (error) {
-                console.log(error)
-            }
-
-            if (Hunts) {
-                localHunts.value = Hunts
-                storeCurrentHunt.setCurrentHunt(Hunts[0].hunt_title)
-                console.log(Hunts)
-                console.log(localHunts.value)
-            }
-        }
-    }
-
     function displayHuntForm() {
-        console.log("displaying hunt form")
         addingHunt.value = true
     }
 
-    async function submitJobHunt() {
-        console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
-
-        const localUser = await supabase.auth.getSession()
-        const localUserId = localUser.data.session?.user.id
-        console.log(localUserId)
-
-        if (localUserId) {
-            const { data: Hunts, error } = await supabase
-            .from('Hunts')
-            .insert([
-                {
-                    user_id: localUserId,
-                    hunt_title: huntTitle.value,
-                    goal_salary: goalSalary.value,
-                    goal_job_title: goalJobTitle.value,
-                    goal_location: goalLocation.value,
-                    goal_tech_stack: goalTechStack.value,
-                    goal_job_type: goalJobTitle.value
-                }
-            ])
-            .select('hunt_title')
-            console.log(`Right after inserting: ${JSON.stringify(Hunts)}`)
-            if (error) {
-                if (error.code = '23505') {
-                    console.log('you\'ve already created a hunt with this title')
-                } else {
-                    console.log(error)
-                }
-            } else {
-                addingHunt.value = false
-                localHunts.value.push(Hunts[0])
-                storeCurrentHunt.setCurrentHunt(Hunts[0].hunt_title)
-            }
+    async function getHunts() {
+        await storeHunts.getHunts()
+        if (Object.keys(storeHunts.error).length !== 0) {
+            console.log("error getting hunts")
+        } else {
+            console.log(`succes ${storeHunts.hunts}`)
+            localHunts.value = storeHunts.hunts
         }
-
     }
+
+    async function submitJobHunt() {
+        await storeHunts.submitJobHunt(
+            huntTitle.value,
+            goalSalary.value,
+            goalJobType.value,
+            goalLocation.value,
+            goalTechStack.value,
+            goalJobTitle.value
+        )
+        if (Object.keys(storeHunts.error).length !== 0) {
+            console.log('error submiting job hunt')
+        } else {
+            console.log(`successfully added job hunt ${storeHunts.hunts}`)
+            addingHunt.value = false
+            localHunts.value = storeHunts.hunts
+        }
+    }
+
+    // async function submitJobHunt() {
+    //     console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
+
+    //     const localUser = await supabase.auth.getSession()
+    //     const localUserId = localUser.data.session?.user.id
+    //     console.log(localUserId)
+
+    //     if (localUserId) {
+    //         const { data: Hunts, error } = await supabase
+    //         .from('Hunts')
+    //         .insert([
+    //             {
+    //                 user_id: localUserId,
+    //                 hunt_title: huntTitle.value,
+    //                 goal_salary: goalSalary.value,
+    //                 goal_job_title: goalJobTitle.value,
+    //                 goal_location: goalLocation.value,
+    //                 goal_tech_stack: goalTechStack.value,
+    //                 goal_job_type: goalJobTitle.value
+    //             }
+    //         ])
+    //         .select('hunt_title')
+    //         console.log(`Right after inserting: ${JSON.stringify(Hunts)}`)
+    //         if (error) {
+    //             if (error.code = '23505') {
+    //                 console.log('you\'ve already created a hunt with this title')
+    //             } else {
+    //                 console.log(error)
+    //             }
+    //         } else {
+    //             addingHunt.value = false
+    //             localHunts.value.push(Hunts[0])
+    //         }
+    //     }
+
+    // }
 </script>
 
 <template>
@@ -166,7 +171,7 @@
                         {{$route.name}}
                     </p>
                 </div>
-                <TopControlBar @add-hunt="displayHuntForm" :local-hunts="localHunts"></TopControlBar>
+                <TopControlBar @add-hunt="displayHuntForm"></TopControlBar>
             </div>
             <div class="content-wrapper">
                 <RouterView ></RouterView>

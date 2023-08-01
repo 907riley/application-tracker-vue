@@ -3,29 +3,28 @@
     import { supabase } from '@/clients/supabase';
     import { ref, onMounted } from 'vue';
     import { storeToRefs } from 'pinia';
-
+    import { useHuntStore } from '@/stores/hunts';
     import { useCurrentHuntStore } from '@/stores/currentHunt';
 
-    const store = useCurrentHuntStore()
+    // const store = useCurrentHuntStore()
+    const storeHunts = useHuntStore()
 
-    const { currentHunt } = storeToRefs(store)
-    const { setCurrentHunt } = store
-
-    const props = defineProps(['localHunts'])
+    // const { currentHunt } = storeToRefs(store)
+    // const { setCurrentHunt } = store
 
     defineEmits(['click', 'addHunt'])
 
-    function changingHunt() {
-        setCurrentHunt(currentHunt.value) 
-    }
+    // function changingHunt() {
+    //     setCurrentHunt(currentHunt.value) 
+    // }
 </script>
 
 <template>
         <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
             <div class="border-2 dropdown-wrapper flex">
                     <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
-                <select id="hunts" @change="changingHunt()" v-model="currentHunt" class="font-genos text-3xl font-bold px-5 flex-1">
-                    <option v-for="hunt in localHunts" :key="hunt.hunt_title" :value="hunt.hunt_title">{{hunt.hunt_title}}</option>
+                <select id="hunts"  v-model="storeHunts.currentHunt" class="font-genos text-3xl font-bold px-5 flex-1">
+                    <option v-for="hunt in storeHunts.hunts" :key="hunt.id" :value="hunt.id">{{hunt.hunt_title}}</option>
                     <!-- <option value="Post Grad">Post Grad</option>
                     <option value="Second Job">Second Job</option>
                     <option value="Game Dev">Game Dev</option> -->
