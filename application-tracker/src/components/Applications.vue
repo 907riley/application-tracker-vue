@@ -5,79 +5,41 @@
     import { supabase } from '@/clients/supabase';
     import { useApplicationStore } from '@/stores/applications';
     import { useHuntStore } from '@/stores/hunts';
+    import type { Database } from '@/db_types/supabase';
 
 
     const storeCurrentHunt = useCurrentHuntStore()
     const storeApplications = useApplicationStore()
     const storeHunts = useHuntStore()
-    // const { currentHunt } = storeToRefs(store)
 
-    // interface Application {
-    //     title: string;
-    //     company: string;
-    //     location: string;
-    //     pay?: number;
-    //     date_applied: Date;
-    //     response: boolean;
-    //     link: string;
-    // }
 
     const applicationFieldsArray  = ['Title', 'Company', 'Location', 'Pay', 'Date Applied', 'Response', 'Link']
 
-    // const exampleApplicationsJSON: Application[] = [
-    //     {
-    //         title: "Backend Engineer",
-    //         company: "Spotify",
-    //         location: "Remote",
-    //         link: "https://jobs.lever.co/spotify/7bd1a238-6935-49cb-9464-45503bc87095?lever-source=LinkedInJobs",
-    //         response: false,
-    //         date_applied: new Date(2023, 6, 12),
-    //         pay: 60000,
-    //     },
-    //     {
-    //         title: "UI Engineer (L4) - Data Experience",
-    //         company: "Netflix",
-    //         location: "Remote",
-    //         link: "https://jobs.netflix.com/jobs/276423841",
-    //         response: false,
-    //         date_applied: new Date(2023, 6, 11),
-    //         pay: 85000,
-    //     },
-    //     {
-    //         title: "Real-Time Software Developer",
-    //         company: "Boeing",
-    //         location: "Remote",
-    //         link: "WayUp",
-    //         response: false,
-    //         date_applied: new Date(2023, 6, 14),
-    //         pay: 75000,
-    //     },  
-    // ]
 
-    // const exampleApplications: Ref<Application[]> = ref(exampleApplicationsJSON)
     const applicationsArray = ref()
     const applicationFields = ref(applicationFieldsArray)
     const searchBar = ref('')
     const addingApplication = ref(false)
 
-    // const props = defineProps(['currentHunt'])
+    type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
-    // function filteredApplications() {
-    //     return applications.value.filter(filterAppsHelper)
-    // }
 
-    // FIXME: anyu type
-    // function filterAppsHelper(app: any) : boolean {
-    //     for ( const [key , value] of Object.entries(app)) {
-    //         //only dealing with string values rn TODO: fix
-    //         if (typeof value === 'string') {
-    //             if (value.toLowerCase().includes(searchBar.value.toLowerCase())) {
-    //                 return true
-    //             }
-    //         }
-    //     }
-    //     return false
-    // }
+    function searchApplication() : Application[] {
+        if (storeApplications.applications && storeApplications.applications.length > 0) {
+            return applicationsArray.value.filter((app: Application) => {
+                for ( const [key , value] of Object.entries(app)) {
+                    // only dealing with string values rn TODO: fix
+                    if (typeof value === 'string') {
+                        if (value.toLowerCase().includes(searchBar.value.toLowerCase())) {
+                            return true
+                        }
+                    }
+                }
+                return false
+            })
+        }
+        return []
+    }
 
     const jobTitle = ref('default title')
     const company = ref('Netflix')
@@ -102,40 +64,6 @@
     }
 
 
-    // async function submitNewApplication() {
-    //     console.log("done with new app")
-
-    //     const localUser = await supabase.auth.getSession()
-    //     const localUserId = localUser.data.session?.user.id
-    //     console.log(localUserId)
-
-    //     if (localUserId) {
-    //         const { data, error } = await supabase
-    //         .from('Applications')
-    //         .insert([
-    //             {
-    //                 user_id: localUserId,
-    //                 hunt_id: storeHunt.currentHunt,
-    //                 job_title: addApplicationTitle.value,
-    //                 company: addApplicationCompany.value,
-    //                 location: addApplicationLocation.value,
-    //                 pay: addApplicationPay.value,
-    //                 applied_at: addApplicationDateApplied.value,
-    //                 response: addApplicationResponse.value,
-    //                 application_link: addApplicationLink.value
-    //             }
-    //         ])
-
-    //         if (error) {
-    //             console.log(error)
-    //         } else {
-    //             console.log("successfull added app")
-    //             addingApplication.value = false
-    //             applicationsArray.value = storeApplications.applications
-    //         }
-    //     }
-
-    // }
 
     async function submitNewApplication() {
         await storeApplications.submitNewApplication(
@@ -157,31 +85,6 @@
         }
     }
 
-
-
-    // async function getApplications() {
-    //     const localUser = await supabase.auth.getSession()
-    //     const localUserId = localUser.data.session?.user.id
-    //     console.log(currentHunt.value)
-
-    //     // get the applications
-    //     if (localUserId) {
-    //         let { data: Application, error } = await supabase
-    //             .from('Applications')
-    //             .select("*")
-    //             .eq('hunt_title', currentHunt.value)
-
-    //         if (error) {
-    //             console.log(error)
-    //         }
-
-    //         if (Application) {
-    //             applicationsArray.value = Application
-    //             console.log(applicationsArray.value)
-    //         }
-    //     }
-    // }
-
     async function getApplications() {
         await storeApplications.getApplications()
         if (Object.keys(storeApplications.error).length !== 0) {
@@ -191,7 +94,6 @@
             applicationsArray.value = storeApplications.applications
         }
     }
-
 
 
 </script>
@@ -261,7 +163,7 @@
                 <button v-for="fields in applicationFields" class="col-span-1 py-4">{{ fields }}</button>
             </div>
             <div class="information-wrapper flex flex-col flex-1">
-                <div v-for="applications in applicationsArray" class="grid grid-cols-8 bg-white font-genos">
+                <div v-for="applications in searchApplication()" class="grid grid-cols-8 bg-white font-genos">
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.job_title }}
@@ -284,7 +186,7 @@
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
-                            {{ new Date(applications.date_applied).getMonth() }} / {{ new Date(applications.date_applied).getDate() }} / {{ new Date(applications.date_applied).getFullYear() }}
+                            {{ new Date(applications.applied_at || "1970-12-12").getMonth() + 1 }} / {{ new Date(applications.applied_at || "1970-12-12").getDate() }} / {{ new Date(applications.applied_at || "1970-12-12").getFullYear() }}
                         </div>
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
@@ -294,9 +196,9 @@
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
-                            <a target="_blank" rel="noopener noreferrer" v-if="applications.application_link.toLowerCase() === 'wayup'"> WayUp </a>
-                            <a target="_blank" rel="noopener noreferrer" v-else-if="applications.application_link.toLowerCase() === 'linkedin'"> Linkedin </a>
-                            <a target="_blank" rel="noopener noreferrer" v-else :href=applications.application_link class="m-auto">
+                            <a target="_blank" rel="noopener noreferrer" v-if="applications.application_link?.toLowerCase() === 'wayup'"> WayUp </a>
+                            <a target="_blank" rel="noopener noreferrer" v-else-if="applications.application_link?.toLowerCase() === 'linkedin'"> Linkedin </a>
+                            <a target="_blank" rel="noopener noreferrer" v-else :href="applications.application_link || ''" class="m-auto">
                                 <span class="material-symbols-outlined text-3xl">open_in_browser</span>
                             </a>
                         </div>

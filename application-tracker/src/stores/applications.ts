@@ -16,7 +16,27 @@ export const useApplicationStore = defineStore('applications', {
         error: {}
     }),
     getters: {
-        
+        applicationsDateFormatted(): Application[] {
+            return this.applications.map((application) => {
+                if (application.applied_at?.slice(0, 10))
+                    application.applied_at = application.applied_at?.slice(0, 10)
+                return application
+            })
+        },
+        // },
+        // searchApplications(searchBar): Application[] {
+        //     return this.applications.filter((app: Application) => {
+        //         for ( const [key , value] of Object.entries(app)) {
+        //             // only dealing with string values rn TODO: fix
+        //             if (typeof value === 'string') {
+        //                 if (value.toLowerCase().includes(searchBar.toLowerCase())) {
+        //                     return true
+        //                 }
+        //             }
+        //         }
+        //         return false
+        //     })
+        // }
     },
     actions: {
         async getApplications() {
