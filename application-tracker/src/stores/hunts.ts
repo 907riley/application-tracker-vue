@@ -13,7 +13,7 @@ type Hunt = Database["public"]["Tables"]["Hunts"]["Row"]
 export const useHuntStore = defineStore('hunts', {
     state: () => ({
         hunts: <Hunt[]>[],
-        currentHunt: 0,
+        currentHunt: useStorage('currentHunt', -1),
         error: {}
     }),
     getters: {
@@ -46,7 +46,9 @@ export const useHuntStore = defineStore('hunts', {
                 } else {
                     if (Hunts) { 
                         this.hunts = Hunts
-                        this.currentHunt = Hunts[0].id 
+                        if (this.currentHunt === -1) {
+                            this.currentHunt = Hunts[0].id 
+                        }
                     }
                     this.error = {}
                 }
