@@ -163,7 +163,7 @@
                 <button v-for="fields in applicationFields" class="col-span-1 py-4">{{ fields }}</button>
             </div>
             <div class="information-wrapper flex flex-col flex-1">
-                <div v-for="applications in searchApplication()" class="grid grid-cols-8 bg-white font-genos">
+                <div v-for="applications in searchApplication()" :key="applications.id" class="grid grid-cols-8 bg-white font-genos">
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.job_title }}
@@ -211,7 +211,7 @@
                             <button class="flex-1 hover:text-blue-500">
                                 <span class="material-symbols-outlined">edit</span>
                             </button>
-                            <button class="flex-1 hover:text-red-500">
+                            <button class="flex-1 hover:text-red-500" @click="storeApplications.deleteApplication(applications.id)">
                                 <span class="material-symbols-outlined">delete</span>
                             </button>
                         </div>

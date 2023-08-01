@@ -93,5 +93,25 @@ export const useApplicationStore = defineStore('applications', {
                 }
             }
         },
+        async deleteApplication(deleteId: string) {
+            const { error } = await supabase
+                .from('Applications')
+                .delete()
+                .eq('id', deleteId)
+
+            if (error) {
+                this.error = error
+            } else {
+                console.log('successfully deleted')
+                this.applications = this.applications.filter((app) => { 
+                    if (app.id === deleteId) {
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                this.error = {}
+            }
+        }
     }
 })
