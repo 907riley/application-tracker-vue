@@ -5,6 +5,9 @@
     import { storeToRefs } from 'pinia';
     import { useHuntStore } from '@/stores/hunts';
     import { useCurrentHuntStore } from '@/stores/currentHunt';
+    import { useApplicationStore } from '@/stores/applications';
+
+    const storeApplications = useApplicationStore()
 
     // const store = useCurrentHuntStore()
     const storeHunts = useHuntStore()
@@ -23,7 +26,7 @@
         <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
             <div class="border-2 dropdown-wrapper flex">
                     <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
-                <select id="hunts"  v-model="storeHunts.currentHunt" class="font-genos text-3xl font-bold px-5 flex-1">
+                <select id="hunts"  v-model="storeHunts.currentHunt" class="font-genos text-3xl font-bold px-5 flex-1" :disabled="storeApplications.activeApplication">
                     <option v-for="hunt in storeHunts.hunts" :key="hunt.id" :value="hunt.id">{{hunt.hunt_title}}</option>
                     <!-- <option value="Post Grad">Post Grad</option>
                     <option value="Second Job">Second Job</option>
@@ -31,7 +34,7 @@
                 </select>
             </div>
             <div class="vertical-plus-wrapper">
-                <button @click="$emit('addHunt')" class="material-symbols-outlined">add</button>
+                <button id="add-hunt-button" @click="$emit('addHunt')" class="material-symbols-outlined" :disabled="storeApplications.activeApplication">add</button>
             </div>
         </div>
 </template>
@@ -47,8 +50,15 @@
     }
 
     .vertical-plus-wrapper {
-        background-color: var(--light-aquamarine);
         display: flex;
+    }
+
+    #add-hunt-button {
+        background-color: var(--light-aquamarine);
+        &:disabled {
+            background-color: var(--disabled-aquamarine);
+        }
+
     }
 
     .material-symbols-outlined {
@@ -60,4 +70,7 @@
         background-color: var(--light-aquamarine);
     }
 
+    #hunts:disabled {
+        background-color: var(--disabled-aquamarine);
+    }
 </style>

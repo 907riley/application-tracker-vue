@@ -13,7 +13,8 @@ type Application = Database["public"]["Tables"]["Applications"]["Row"]
 export const useApplicationStore = defineStore('applications', {
     state: () => ({
         applications: <Application[]>[],
-        error: {}
+        error: {},
+        activeApplication: false
     }),
     getters: {
         applicationsDateFormatted(): Application[] {

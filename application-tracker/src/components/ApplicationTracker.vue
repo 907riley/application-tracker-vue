@@ -10,13 +10,13 @@
     import { useUserStore } from '@/stores/user';
     import { useHuntStore } from '@/stores/hunts';
     import { storeToRefs } from 'pinia';
-import { Stream } from 'stream';
 
     const addingHunt = ref(false)
 
     const storeUser = useUserStore()
     // const storeCurrentHunt = useCurrentHuntStore()
     const storeHunts = useHuntStore()
+
 
 
     const jobTypes = ref([
@@ -41,6 +41,11 @@ import { Stream } from 'stream';
 
     function displayHuntForm() {
         addingHunt.value = true
+    }
+
+    // TODO: make form have default values somewhere, probably in the store
+    function exitHuntForm() {
+        addingHunt.value = false
     }
 
     async function getHunts() {
@@ -113,7 +118,15 @@ import { Stream } from 'stream';
     <div v-if="addingHunt" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
         <div class="hunt-form-wrapper flex flex-col bg-white font-genos">
             <div class="title-wrapper text-white font-bold text-5xl flex justify-center p-5 border-b-2 border-black">
+                <div class="w-24">
+
+                </div>
                 <span>New Job Hunt</span>
+                <div class="w-24 items-center text-5xl flex flex-row place-content-end">
+                    <button class="w-fit h-fit" @click="exitHuntForm">
+                        <span id="exit-button" class="material-symbols-outlined w-fit h-fit">close</span>
+                    </button>
+                </div>
             </div>
             <div class="form-content-wrapper flex flex-col gap-8 m-10">
                 <div class="title-form-wrapper gap-6 flex flex-col text-3xl">
@@ -225,5 +238,16 @@ import { Stream } from 'stream';
 
     .title {
         color: white;
+    }
+
+    #exit-button{
+        font-size: 3rem;
+
+        color: var(--light-pink);
+        &:hover {
+            color: var(--bright-pink);
+            font-weight: bold;
+
+        }
     }
 </style>

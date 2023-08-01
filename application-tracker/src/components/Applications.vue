@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, type App, type Ref, onMounted, watchEffect, watch} from 'vue'
+    import { ref, type App, type Ref, onMounted, watchEffect, watch, onUnmounted} from 'vue'
     import { useCurrentHuntStore } from '@/stores/currentHunt';
     import { storeToRefs } from 'pinia';
     import { supabase } from '@/clients/supabase';
@@ -21,6 +21,9 @@
 
     const searchBar = ref('')
     const addingApplication = ref(false)
+    const deletingApplication = ref(false)
+    const deletingApplicationId = ref("")
+
     // TODO: these vars are coupled, make them so
     const updatingApplication = ref(false)
     const updatingApplicationId = ref("")
@@ -39,6 +42,10 @@
         getApplications()
     })
 
+    onUnmounted(() => {
+        storeApplications.activeApplication = false
+    })
+
     watch(() => storeHunts.currentHunt, async () => {
         console.log("watch effect happening")
         await getApplications()
@@ -47,13 +54,23 @@
 
     function addApplication() {
         addingApplication.value = true
+        storeApplications.activeApplication = true
+    }
+
+    function deleteApplication(id: string) {
+        deletingApplication.value = true
+        deletingApplicationId.value = id
+        storeApplications.activeApplication = true
     }
 
     // TODO: make form have default values somewhere, probably in the store
     function exitApplicationForm() {
         addingApplication.value = false
         updatingApplication.value = false
+        deletingApplication.value = false
+        deletingApplicationId.value = ''
         updatingApplicationId.value = ''
+        storeApplications.activeApplication = false
     }
 
     function updateApplication(updateId: string) {
@@ -69,6 +86,20 @@
 
         updatingApplication.value = true
         updatingApplicationId.value = updateId
+        storeApplications.activeApplication = true
+    }
+
+    async function removeApplication(id: string) {
+        await storeApplications.deleteApplication(id)
+
+        if (Object.keys(storeApplications.error).length !== 0) {
+            console.log('error deleting application')
+        } else {
+            console.log('successfully removed application')
+            deletingApplication.value = false
+            applicationsArray.value = storeApplications.applications
+            storeApplications.activeApplication = false
+        }
     }
 
     async function submitUpdatedApplication() {
@@ -90,6 +121,7 @@
             updatingApplication.value = false
             updatingApplicationId.value = ''
             applicationsArray.value = storeApplications.applications
+            storeApplications.activeApplication = false
         }
     }
 
@@ -127,6 +159,7 @@
             console.log('success submitting application')
             addingApplication.value = false
             applicationsArray.value = storeApplications.applications
+            storeApplications.activeApplication = false
         }
     }
 
@@ -205,6 +238,28 @@
             </div>
         </div>
     </div>
+    <div v-else-if="deletingApplication" class="backdrop-blur-xl fixed z-50 h-screen w-full flex justify-center items-center">
+        <div class="application-form-wrapper flex flex-col bg-white font-genos">
+            <div class="title-wrapper text-white font-bold text-5xl flex justify-center p-5 border-b-2 border-black">
+                <div class="w-24">
+
+                </div>
+                <div class="flex-1 text-center">
+                    <span> Are you sure? </span>
+                </div>
+                <div class="w-24 items-center text-5xl flex flex-row place-content-end">
+                    <button class="w-fit h-fit" @click="exitApplicationForm">
+                        <span id="exit-button" class="material-symbols-outlined w-fit h-fit">close</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-content-wrapper flex flex-col gap-8 m-10">
+                <div class="button-wrapper flex border-2 border-black">
+                    <button @click="removeApplication(deletingApplicationId)" id="done-button" class="flex-1 p-2 font-bold text-3xl">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="h-fit p-5 flex-1 flex flex-col">
         <div class="search-add-bar-wrapper h-32 flex flex-row">
             <div class="search-bar-wrapper my-auto">
@@ -268,7 +323,7 @@
                             <button class="flex-1 hover:text-blue-500" @click="updateApplication(applications.id)">
                                 <span class="material-symbols-outlined row-controls">edit</span>
                             </button>
-                            <button class="flex-1 hover:text-red-500" @click="storeApplications.deleteApplication(applications.id)">
+                            <button class="flex-1 hover:text-red-500" @click="deleteApplication(applications.id)">
                                 <span class="material-symbols-outlined row-controls">delete</span>
                             </button>
                         </div>

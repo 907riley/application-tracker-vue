@@ -17,6 +17,7 @@
     --dark-aquamarine: #053B3F;
     --bright-pink: #FF00B8;
     --light-pink: #D728A6;
+    --disabled-aquamarine: #237667
 
     // font-family: 'Genos', sans-serif;
   }
