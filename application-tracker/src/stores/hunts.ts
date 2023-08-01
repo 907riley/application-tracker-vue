@@ -14,7 +14,6 @@ export const useHuntStore = defineStore('hunts', {
         hunts: <Hunt[]>[],
         currentHunt: 0,
         error: {}
-
     }),
     getters: {
 

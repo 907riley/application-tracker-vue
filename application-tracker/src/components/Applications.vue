@@ -2,10 +2,15 @@
     import { ref, type App, type Ref, onMounted, watchEffect, watch} from 'vue'
     import { useCurrentHuntStore } from '@/stores/currentHunt';
     import { storeToRefs } from 'pinia';
-import { supabase } from '@/clients/supabase';
+    import { supabase } from '@/clients/supabase';
+    import { useApplicationStore } from '@/stores/applications';
+    import { useHuntStore } from '@/stores/hunts';
 
-    const store = useCurrentHuntStore()
-    const { currentHunt } = storeToRefs(store)
+
+    const storeCurrentHunt = useCurrentHuntStore()
+    const storeApplications = useApplicationStore()
+    const storeHunts = useHuntStore()
+    // const { currentHunt } = storeToRefs(store)
 
     // interface Application {
     //     title: string;
@@ -74,84 +79,120 @@ import { supabase } from '@/clients/supabase';
     //     return false
     // }
 
-    const addApplicationTitle = ref('default title')
-    const addApplicationCompany = ref('Netflix')
-    const addApplicationLocation = ref('Remote')
-    const addApplicationPay = ref(65000)
-    const addApplicationDateApplied = ref(new Date().toISOString().slice(0, 10))
-    const addApplicationResponse = ref(false)
-    const addApplicationLink = ref('exampleLink.com')
-
-
-    async function submitNewApplication() {
-        console.log("done with new app")
-
-        const localUser = await supabase.auth.getSession()
-        const localUserId = localUser.data.session?.user.id
-        console.log(localUserId)
-
-        if (localUserId) {
-            const { data, error } = await supabase
-            .from('Applications')
-            .insert([
-                {
-                    user_id: localUserId,
-                    hunt_title: currentHunt.value,
-                    job_title: addApplicationTitle.value,
-                    company: addApplicationCompany.value,
-                    location: addApplicationLocation.value,
-                    pay: addApplicationPay.value,
-                    applied_at: addApplicationDateApplied.value,
-                    response: addApplicationResponse.value,
-                    application_link: addApplicationLink.value
-                }
-            ])
-
-            if (error) {
-                console.log(error)
-            } else {
-                console.log("successfull added app")
-                addingApplication.value = false
-            }
-        }
-
-    }
-
-    function addApplication() {
-        addingApplication.value = true
-    }
-
-    async function getApplications() {
-        const localUser = await supabase.auth.getSession()
-        const localUserId = localUser.data.session?.user.id
-        console.log(currentHunt.value)
-
-        // get the applications
-        if (localUserId) {
-            let { data: Application, error } = await supabase
-                .from('Applications')
-                .select("*")
-                .eq('hunt_title', currentHunt.value)
-
-            if (error) {
-                console.log(error)
-            }
-
-            if (Application) {
-                applicationsArray.value = Application
-                console.log(applicationsArray.value)
-            }
-        }
-    }
+    const jobTitle = ref('default title')
+    const company = ref('Netflix')
+    const location = ref('Remote')
+    const pay = ref(65000)
+    const dateApplied = ref(new Date().toISOString().slice(0, 10))
+    const response = ref(false)
+    const applicationLink = ref('exampleLink.com')
 
     onMounted(() => {
         getApplications()
     })
 
-    watch(currentHunt, async () => {
+    watch(() => storeHunts.currentHunt, async () => {
         console.log("watch effect happening")
-        getApplications()
+        await getApplications()
     })
+    
+
+    function addApplication() {
+        addingApplication.value = true
+    }
+
+
+    // async function submitNewApplication() {
+    //     console.log("done with new app")
+
+    //     const localUser = await supabase.auth.getSession()
+    //     const localUserId = localUser.data.session?.user.id
+    //     console.log(localUserId)
+
+    //     if (localUserId) {
+    //         const { data, error } = await supabase
+    //         .from('Applications')
+    //         .insert([
+    //             {
+    //                 user_id: localUserId,
+    //                 hunt_id: storeHunt.currentHunt,
+    //                 job_title: addApplicationTitle.value,
+    //                 company: addApplicationCompany.value,
+    //                 location: addApplicationLocation.value,
+    //                 pay: addApplicationPay.value,
+    //                 applied_at: addApplicationDateApplied.value,
+    //                 response: addApplicationResponse.value,
+    //                 application_link: addApplicationLink.value
+    //             }
+    //         ])
+
+    //         if (error) {
+    //             console.log(error)
+    //         } else {
+    //             console.log("successfull added app")
+    //             addingApplication.value = false
+    //             applicationsArray.value = storeApplications.applications
+    //         }
+    //     }
+
+    // }
+
+    async function submitNewApplication() {
+        await storeApplications.submitNewApplication(
+            jobTitle.value,
+            company.value,
+            location.value,
+            pay.value,
+            dateApplied.value,
+            response.value,
+            applicationLink.value
+        )
+
+        if (Object.keys(storeApplications.error).length !== 0) {
+            console.log('error submitting application')
+        } else {
+            console.log('success submitting application')
+            addingApplication.value = false
+            applicationsArray.value = storeApplications.applications
+        }
+    }
+
+
+
+    // async function getApplications() {
+    //     const localUser = await supabase.auth.getSession()
+    //     const localUserId = localUser.data.session?.user.id
+    //     console.log(currentHunt.value)
+
+    //     // get the applications
+    //     if (localUserId) {
+    //         let { data: Application, error } = await supabase
+    //             .from('Applications')
+    //             .select("*")
+    //             .eq('hunt_title', currentHunt.value)
+
+    //         if (error) {
+    //             console.log(error)
+    //         }
+
+    //         if (Application) {
+    //             applicationsArray.value = Application
+    //             console.log(applicationsArray.value)
+    //         }
+    //     }
+    // }
+
+    async function getApplications() {
+        await storeApplications.getApplications()
+        if (Object.keys(storeApplications.error).length !== 0) {
+            console.log(`error in getting applications ${JSON.stringify(storeApplications.error)}`)
+        } else {
+            console.log('successfully got applications')
+            applicationsArray.value = storeApplications.applications
+        }
+    }
+
+
 
 </script>
 
@@ -166,37 +207,37 @@ import { supabase } from '@/clients/supabase';
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_title" class="place-self-start"> Title: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_title" type="text" v-model="addApplicationTitle" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_title" type="text" v-model="jobTitle" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_company" class="place-self-start"> Company: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_company" type="text" v-model="addApplicationCompany" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_company" type="text" v-model="company" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_location" class="place-self-start"> Location: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_location" type="text" v-model="addApplicationLocation" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_location" type="text" v-model="location" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_pay" class="place-self-start"> Pay: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_pay" type="number" v-model="addApplicationPay" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_pay" type="number" v-model="pay" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_date_applied" class="place-self-start"> Date Applied: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_date_applied" type="date" v-model="addApplicationDateApplied" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_date_applied" type="date" v-model="dateApplied" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_response" class="place-self-start"> Response: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_response" type="checkbox" v-model="addApplicationResponse" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_response" type="checkbox" v-model="response" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_link" class="place-self-start"> Application Link: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_link" type="text" v-model="addApplicationLink" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <input id="add_application_link" type="text" v-model="applicationLink" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                 </div>
                 <div class="button-wrapper flex border-2 border-black">
