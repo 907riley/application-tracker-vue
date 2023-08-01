@@ -7,13 +7,14 @@
     import { ref, onMounted } from 'vue';
     import { supabase } from '@/clients/supabase';
     import { useCurrentHuntStore } from '@/stores/currentHunt';
+    import { useUserStore } from '@/stores/user';
     import { storeToRefs } from 'pinia';
 
     const addingHunt = ref(false)
 
-    const store = useCurrentHuntStore()
-    const { currentHunt } = storeToRefs(store)
-    const { setCurrentHunt } = store
+    const storeUser = useUserStore()
+    const storeCurrentHunt = useCurrentHuntStore()
+
 
     const jobTypes = ref([
         { value: "Internship" },
@@ -52,7 +53,7 @@
 
             if (Hunts) {
                 localHunts.value = Hunts
-                setCurrentHunt(Hunts[0].hunt_title)
+                storeCurrentHunt.setCurrentHunt(Hunts[0].hunt_title)
                 console.log(Hunts)
                 console.log(localHunts.value)
             }
@@ -96,7 +97,7 @@
             } else {
                 addingHunt.value = false
                 localHunts.value.push(Hunts[0])
-                setCurrentHunt(Hunts[0].hunt_title)
+                storeCurrentHunt.setCurrentHunt(Hunts[0].hunt_title)
             }
         }
 

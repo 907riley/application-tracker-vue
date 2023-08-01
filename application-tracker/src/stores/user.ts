@@ -3,15 +3,16 @@ import { defineStore } from 'pinia'
 import { supabase } from '@/clients/supabase';
 import router from '@/router';
 import { AuthError } from '@supabase/supabase-js';
+import { useStorage } from '@vueuse/core'
 
 
 export const useUserStore = defineStore('user',  {
     state: () => ({
-        email: "",
+        email: useStorage('email', ""),
         password: "",
-        firstName: "",
-        userId: "",
-        sessionId: "",
+        firstName: useStorage('firstName', ""),
+        userId: useStorage('userId', ""),
+        sessionId: useStorage('sessionId', ""),
         error: {}
     }),
     getters: {
