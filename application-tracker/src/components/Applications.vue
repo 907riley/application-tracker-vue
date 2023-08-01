@@ -203,6 +203,19 @@
                             </a>
                         </div>
                     </div>
+                    <div class="col-span-1 p-2 border-r border-b border-black flex"> 
+                        <div class="flex-1 text-center flex flex-row text-4xl">
+                            <button class="flex-1 hover:text-pink-500">
+                                <span class="material-symbols-outlined">favorite</span>
+                            </button>
+                            <button class="flex-1 hover:text-blue-500">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            <button class="flex-1 hover:text-red-500">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -231,6 +244,10 @@
 
     .label-bar-wrapper {
         background-color: var(--dark-aquamarine);
+    }
+
+    .material-symbols-outlined {
+        font-size: 2rem;
     }
 
 </style>
