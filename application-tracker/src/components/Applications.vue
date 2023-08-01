@@ -26,7 +26,7 @@
 
     function searchApplication() : Application[] {
         if (storeApplications.applications && storeApplications.applications.length > 0) {
-            return applicationsArray.value.filter((app: Application) => {
+            return storeApplications.applications.filter((app: Application) => {
                 for ( const [key , value] of Object.entries(app)) {
                     // only dealing with string values rn TODO: fix
                     if (typeof value === 'string') {
