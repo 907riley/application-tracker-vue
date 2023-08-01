@@ -4,6 +4,7 @@ import { useStorage } from '@vueuse/core'
 import { useUserStore } from './user';
 import { type Database } from '@/db_types/supabase';
 import { useHuntStore } from './hunts'
+import type { App } from 'vue';
 
 const storeUser = useUserStore()
 const storeHunts = useHuntStore()
@@ -14,7 +15,9 @@ export const useApplicationStore = defineStore('applications', {
     state: () => ({
         applications: <Application[]>[],
         error: {},
-        activeApplication: false
+        activeApplication: false,
+        sortedBy: <keyof Application>'job_title',
+        ascending: true
     }),
     getters: {
         applicationsDateFormatted(): Application[] {
@@ -22,6 +25,14 @@ export const useApplicationStore = defineStore('applications', {
                 if (application.applied_at?.slice(0, 10))
                     application.applied_at = application.applied_at?.slice(0, 10)
                 return application
+            })
+        },
+        sortedApplications(): Application[] {
+            return this.applications.sort((a: Application, b: Application) => {
+                const valueA = a[this.sortedBy] || 0
+                const valueB = a[this.sortedBy] || 0
+
+                return Number(valueA > valueB) - Number(valueA < valueB)
             })
         },
         // },

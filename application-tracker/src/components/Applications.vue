@@ -7,6 +7,12 @@
     import { useHuntStore } from '@/stores/hunts';
     import type { Database } from '@/db_types/supabase';
 
+    interface sortedTitle {
+        title: string,
+        ascending: boolean
+    }
+
+    type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
     const storeCurrentHunt = useCurrentHuntStore()
     const storeApplications = useApplicationStore()
@@ -24,11 +30,14 @@
     const deletingApplication = ref(false)
     const deletingApplicationId = ref("")
 
+    const titleSorting = ref<sortedTitle>({
+        title: 'Title',
+        ascending: true
+    })
+
     // TODO: these vars are coupled, make them so
     const updatingApplication = ref(false)
     const updatingApplicationId = ref("")
-
-    type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
     const jobTitle = ref<string>('default title')
     const company = ref<string | null>('Netflix')
