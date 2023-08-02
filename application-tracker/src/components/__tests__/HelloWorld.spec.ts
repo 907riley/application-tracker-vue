@@ -1,11 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { expect, test } from 'vitest'
+// import { sum } from './sum'
 
-import { mount } from '@vue/test-utils'
-// import HelloWorld from '../HelloWorld.vue'
-
-// describe('HelloWorld', () => {
-//   it('renders properly', () => {
-//     const wrapper = mount(HelloWorld, { props: { msg: 'Hello Vitest' } })
-//     expect(wrapper.text()).toContain('Hello Vitest')
-//   })
-// })
+test('adds 1 + 2 to equal 3', () => {
+  expect((1 + 2)).toBe(3)
+})
