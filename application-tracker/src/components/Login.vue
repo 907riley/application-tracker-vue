@@ -11,6 +11,9 @@
                         <h3 v-else class="text-6xl">Login</h3>
                         <span>All your job hunts in one place</span>
                     </div>
+                    <div v-if="Object.keys(storeUser.error).length !== 0" >
+                        <span>{{ storeUser.error }}</span>
+                    </div>
                     <div v-if="signingUp" class="first-name-wrapper flex flex-col gap-1">
                             <label class="text-2xl" for="firstName">First Name (optional):</label>
                             <input id="firstName" type='text' v-model="storeUser.firstName" class="bg-zinc-300 text-2xl p-1 px-2 border-black border"/>
@@ -113,6 +116,7 @@
         await storeUser.login()
         if (Object.keys(storeUser.error).length !== 0) {
             console.log("bad login")
+
         } else {
             router.push({ name: 'Applications', replace: true })
         }
