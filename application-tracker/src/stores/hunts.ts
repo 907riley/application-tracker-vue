@@ -15,7 +15,7 @@ export const useHuntStore = defineStore('hunts', {
     state: () => ({
         hunts: <Hunt[]>[],
         currentHunt: useStorage('currentHunt', -1),
-        error: <PostgrestError | null>
+        error: <PostgrestError | null>{}
     }),
     getters: {
 

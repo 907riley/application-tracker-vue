@@ -6,11 +6,8 @@
     import { useApplicationStore } from '@/stores/applications';
     import { useHuntStore } from '@/stores/hunts';
     import type { Database } from '@/db_types/supabase';
+import { stringify } from 'querystring';
 
-    interface sortedTitle {
-        title: string,
-        ascending: boolean
-    }
 
     type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
@@ -19,7 +16,43 @@
     const storeHunts = useHuntStore()
 
 
-    const applicationFieldsArray  = ['Title', 'Company', 'Location', 'Pay', 'Date Applied', 'Response', 'Link']
+    const applicationFieldsArray: {displayString: string, databaseString: keyof Application}[]  = [
+        {
+            displayString: 'Title',
+            databaseString: 'job_title',
+        
+        },
+        {
+            displayString: 'Company',
+            databaseString: 'company',
+        
+        },
+        {
+            displayString: 'Location',
+            databaseString: 'location',
+        
+        }, 
+        {
+            displayString: 'Pay',
+            databaseString: 'pay',
+        
+        }, 
+        {
+            displayString: 'Date Applied',
+            databaseString: 'applied_at',
+        
+        }, 
+        {
+            displayString: 'Response',
+            databaseString: 'response',
+        
+        }, 
+        {
+            displayString: 'Link',
+            databaseString: 'application_link',
+        
+        }
+    ]
 
 
     const applicationsArray = ref()
@@ -30,10 +63,6 @@
     const deletingApplication = ref(false)
     const deletingApplicationId = ref("")
 
-    const titleSorting = ref<sortedTitle>({
-        title: 'Title',
-        ascending: true
-    })
 
     // TODO: these vars are coupled, make them so
     const updatingApplication = ref(false)
@@ -136,7 +165,7 @@
 
     function searchApplication() : Application[] {
         if (storeApplications.applications && storeApplications.applications.length > 0) {
-            return storeApplications.applications.filter((app: Application) => {
+            return storeApplications.sortedApplications.filter((app: Application) => {
                 for ( const [key , value] of Object.entries(app)) {
                     // only dealing with string values rn TODO: fix
                     if (typeof value === 'string') {
@@ -179,6 +208,15 @@
         } else {
             console.log('successfully got applications')
             applicationsArray.value = storeApplications.applications
+        }
+    }
+
+    function changeSortOrder(databaseString: keyof Application) {
+        if (storeApplications.sortedBy === databaseString) {
+            storeApplications.ascending = !storeApplications.ascending
+        } else {
+            storeApplications.sortedBy = databaseString
+            storeApplications.ascending = true
         }
     }
 
@@ -284,7 +322,7 @@
         </div>
         <div class="information-section-wrapper flex-1 flex flex-col">
             <div class="label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 border-2 border-top border-black rounded-t-3xl">
-                <button v-for="fields in applicationFields" class="col-span-1 py-4">{{ fields }}</button>
+                <button v-for="field in applicationFields" class="col-span-1 py-4" @click="changeSortOrder(field.databaseString)">{{ field.displayString }}</button>
             </div>
             <div class="information-wrapper flex flex-col flex-1">
                 <div v-for="applications in searchApplication()" :key="applications.id" class="grid grid-cols-8 bg-white font-genos">

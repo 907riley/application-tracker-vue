@@ -31,9 +31,9 @@ export const useApplicationStore = defineStore('applications', {
         sortedApplications(): Application[] {
             return this.applications.sort((a: Application, b: Application) => {
                 const valueA = a[this.sortedBy] || 0
-                const valueB = a[this.sortedBy] || 0
+                const valueB = b[this.sortedBy] || 0
 
-                return Number(valueA > valueB) - Number(valueA < valueB)
+                return this.ascending ? (Number(valueA > valueB) - Number(valueA < valueB)) : -(Number(valueA > valueB) - Number(valueA < valueB))
             })
         },
         // },
