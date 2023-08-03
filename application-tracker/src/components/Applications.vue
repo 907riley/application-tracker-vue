@@ -321,7 +321,7 @@ import { stringify } from 'querystring';
             </div>
         </div>
         <div class="information-section-wrapper flex-1 flex flex-col">
-            <div class="label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 border-2 border-top border-black rounded-t-3xl">
+            <div class="label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 rounded-t-3xl">
                 <div v-for="field in applicationFields" class="label-wrapper inline flex flex-row">
                     <div class="w-12">
 
@@ -442,9 +442,13 @@ import { stringify } from 'querystring';
         color: var(--light-pink);
 
     }
+
+    .label-bar-wrapper {
+        border-top: white 1px solid;
+    }
     
     .label-wrapper {
-        box-shadow: 0px -2px 2px -2px inset white ;
+        border-right: white 1px solid;
     }
 
     .label-wrapper:hover {
