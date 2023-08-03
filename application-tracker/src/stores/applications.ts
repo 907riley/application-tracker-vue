@@ -5,6 +5,7 @@ import { useUserStore } from './user';
 import { type Database } from '@/db_types/supabase';
 import { useHuntStore } from './hunts'
 import type { App } from 'vue';
+import { type PostgrestError } from '@supabase/supabase-js';
 
 const storeUser = useUserStore()
 const storeHunts = useHuntStore()
@@ -14,7 +15,7 @@ type Application = Database["public"]["Tables"]["Applications"]["Row"]
 export const useApplicationStore = defineStore('applications', {
     state: () => ({
         applications: <Application[]>[],
-        error: {},
+        error: <PostgrestError | null>{},
         activeApplication: false,
         sortedBy: <keyof Application>'job_title',
         ascending: true
@@ -66,7 +67,7 @@ export const useApplicationStore = defineStore('applications', {
                 } else {
                     if (Applications) {
                         this.applications = Applications
-                        this.error = {}
+                        this.error = null
                     }
                 }
             }
@@ -100,7 +101,7 @@ export const useApplicationStore = defineStore('applications', {
                     console.log(`succesfully submitted new application ${data}`)
                     if (data) {
                         this.applications.push(data[0])
-                        this.error = {}
+                        this.error = null
                     }
                 }
             }
@@ -122,7 +123,7 @@ export const useApplicationStore = defineStore('applications', {
                         return true
                     }
                 })
-                this.error = {}
+                this.error = null
             }
         },
         async updateApplication(id: string, jobTitle: string, company: string | null, location: string | null, pay: number | null, appliedAt: string | null, response: boolean | null, applicationLink: string | null) {
@@ -141,7 +142,7 @@ export const useApplicationStore = defineStore('applications', {
                 .select('*')
             
             if (error) {
-                this.error = {}
+                this.error = null
                 console.log('error in updating application')
             } else {
                 console.log('succesfully updated')
@@ -157,7 +158,7 @@ export const useApplicationStore = defineStore('applications', {
                     }
                     return app
                 })
-                this.error = {}
+                this.error = null
             }
         },
         // FIXME: this is jank

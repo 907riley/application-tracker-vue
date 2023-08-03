@@ -101,7 +101,7 @@
     async function removeApplication(id: string) {
         await storeApplications.deleteApplication(id)
 
-        if (Object.keys(storeApplications.error).length !== 0) {
+        if (storeApplications.error) {
             console.log('error deleting application')
         } else {
             console.log('successfully removed application')
@@ -123,7 +123,7 @@
             applicationLink.value
         )
 
-        if (Object.keys(storeApplications.error).length !== 0) {
+        if (storeApplications.error) {
             console.log('error updating application')
         } else {
             console.log('successfully updated application')
@@ -162,7 +162,7 @@
             applicationLink.value
         )
 
-        if (Object.keys(storeApplications.error).length !== 0) {
+        if (storeApplications.error) {
             console.log('error submitting application')
         } else {
             console.log('success submitting application')
@@ -174,8 +174,8 @@
 
     async function getApplications() {
         await storeApplications.getApplications()
-        if (Object.keys(storeApplications.error).length !== 0) {
-            console.log(`error in getting applications ${JSON.stringify(storeApplications.error)}`)
+        if (storeApplications.error) {
+            console.log(`error in getting applications ${storeApplications.error.message}`)
         } else {
             console.log('successfully got applications')
             applicationsArray.value = storeApplications.applications
@@ -203,6 +203,9 @@
                 </div>
             </div>
             <div class="form-content-wrapper flex flex-col gap-8 m-10">
+                <div v-if="storeApplications.error">
+                    <span class="text-red-500">{{ storeApplications.error.message }}</span>
+                </div>
                 <div class="information-wrapper gap-6 flex flex-col text-3xl">
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_title" class="place-self-start"> Title: </label>
