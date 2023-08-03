@@ -441,11 +441,15 @@ import { stringify } from 'querystring';
     .sorted-arrow {
         color: var(--light-pink);
 
-    } 
+    }
+    
+    .label-wrapper {
+        box-shadow: 0px -2px 2px -2px inset white ;
+    }
 
     .label-wrapper:hover {
 
-        font-size: 2rem;
+        color: var(--bright-pink);
         .material-symbols-outlined {
             color: var(--bright-pink);
         }
