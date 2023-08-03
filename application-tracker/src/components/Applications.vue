@@ -322,7 +322,22 @@ import { stringify } from 'querystring';
         </div>
         <div class="information-section-wrapper flex-1 flex flex-col">
             <div class="label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 border-2 border-top border-black rounded-t-3xl">
-                <button v-for="field in applicationFields" class="col-span-1 py-4" @click="changeSortOrder(field.databaseString)">{{ field.displayString }}</button>
+                <div v-for="field in applicationFields" class="label-wrapper inline flex flex-row">
+                    <div class="w-12">
+
+                    </div>
+                    <button class="col-span-1 py-4 flex-1" @click="changeSortOrder(field.databaseString)">{{ field.displayString }}</button>
+                    <div class="w-12 flex">
+                        <div v-if="storeApplications.sortedBy === field.databaseString" class="flex-1 flex flex-col justify-center">
+                            <span v-if="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                arrow_upward
+                            </span>
+                            <span v-else="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                arrow_downward
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="information-wrapper flex flex-col flex-1">
                 <div v-for="applications in searchApplication()" :key="applications.id" class="grid grid-cols-8 bg-white font-genos">
@@ -423,4 +438,16 @@ import { stringify } from 'querystring';
         }
     }
 
+    .sorted-arrow {
+        color: var(--light-pink);
+
+    } 
+
+    .label-wrapper:hover {
+
+        font-size: 2rem;
+        .material-symbols-outlined {
+            color: var(--bright-pink);
+        }
+    }
 </style>
