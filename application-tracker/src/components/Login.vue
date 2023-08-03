@@ -11,8 +11,8 @@
                         <h3 v-else class="text-6xl">Login</h3>
                         <span>All your job hunts in one place</span>
                     </div>
-                    <div v-if="Object.keys(storeUser.error).length !== 0" >
-                        <span>{{ storeUser.error }}</span>
+                    <div v-if="storeUser.error" >
+                        <span class="text-red-500">{{ storeUser.error.message }}</span>
                     </div>
                     <div v-if="signingUp" class="first-name-wrapper flex flex-col gap-1">
                             <label class="text-2xl" for="firstName">First Name (optional):</label>
@@ -59,7 +59,6 @@
                     <div v-else class="sign-up-text-login flex">
                         <button @click="switchMode" class="flex-1">Sign Up</button>
                     </div>
-                    <button @click="seeCurrentUser">see user</button>
                 </div>
             </div>
         </div>
@@ -84,9 +83,10 @@
     // create account
     async function createAccount() {
         await storeUser.createAccount()
-        if (Object.keys(storeUser.error).length !== 0) {
+        if (storeUser.error) {
             console.log("error creating account")
         } else {
+            console.log('success creating account')
             signingUp.value = false
         }
     }
@@ -94,6 +94,7 @@
     // switch to sign up/login
     function switchMode() {
         signingUp.value = !signingUp.value
+        storeUser.error = null
     }
 
     // login
@@ -114,8 +115,8 @@
 
     async function login() {
         await storeUser.login()
-        if (Object.keys(storeUser.error).length !== 0) {
-            console.log("bad login")
+        if (storeUser.error) {
+            console.log(`bad login ${storeUser.error}`)
 
         } else {
             router.push({ name: 'Applications', replace: true })

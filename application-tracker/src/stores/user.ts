@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user',  {
         firstName: useStorage('firstName', ""),
         userId: useStorage('userId', ""),
         sessionId: useStorage('sessionId', ""),
-        error: {}
+        error: <AuthError | null>{}
     }),
     getters: {
 
@@ -27,12 +27,13 @@ export const useUserStore = defineStore('user',  {
             })
 
             if (error) {
+                console.log(`error in login ${error}`)
                 this.error = error
             } else {
                 if (data.user.email) { this.email = data.user.email }
                 if (data.user.id) { this.userId = data.user.id  }
                 this.sessionId = data.session.access_token
-                this.error = {}
+                this.error = null
                 this.password = ''
             }
         },
@@ -47,11 +48,16 @@ export const useUserStore = defineStore('user',  {
                     }
                 }
             })
+            console.log(`createAccount call`)
+            console.log(`data: ${data}`)
+            console.log(`error: ${error}`)
+
 
             if (error) {
+                console.log(`error in create account ${error}`)
                 this.error = error
             } else {
-                this.error = {}
+                this.error = null
                 this.password = ''
             }
         }
