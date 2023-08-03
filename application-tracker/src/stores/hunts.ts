@@ -4,6 +4,7 @@ import { supabase } from '@/clients/supabase';
 import { useUserStore } from './user';
 import { type Database } from '@/db_types/supabase';
 import { useStorage } from '@vueuse/core'
+import { type PostgrestError } from '@supabase/supabase-js';
 
 const userStore = useUserStore()
 
@@ -14,14 +15,13 @@ export const useHuntStore = defineStore('hunts', {
     state: () => ({
         hunts: <Hunt[]>[],
         currentHunt: useStorage('currentHunt', -1),
-        error: {}
+        error: <PostgrestError | null>
     }),
     getters: {
 
     },
     actions: {
-        // FIXME: need proper typing here
-        setHunts(newHunts: []) {
+        setHunts(newHunts: Hunt[]) {
           this.hunts = newHunts
         },
       
@@ -46,20 +46,21 @@ export const useHuntStore = defineStore('hunts', {
                 } else {
                     if (Hunts) { 
                         this.hunts = Hunts
+                        // if the current hunt hasn't already been set for this session
                         if (this.currentHunt === -1) {
                             this.currentHunt = Hunts[0].id 
                         }
                     }
-                    this.error = {}
+                    this.error = null
                 }
             } 
         },
       
         async submitJobHunt(huntTitle: string, goalSalary: number, goalJobType: string, goalLocation: string, goalTechStack: string, goalJobTitle: string) {
-            console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
+            // console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
       
             const localUserId = userStore.userId
-            console.log(localUserId)
+            // console.log(localUserId)
         
             if (localUserId) {
                 const { data: Hunts, error } = await supabase
@@ -76,13 +77,8 @@ export const useHuntStore = defineStore('hunts', {
                     }
                 ])
                 .select('*')
-                console.log(`Right after inserting: ${JSON.stringify(Hunts)}`)
+                // console.log(`Right after inserting: ${JSON.stringify(Hunts)}`)
                 if (error) {
-                    if (error.code = '23505') {
-                        console.log('you\'ve already created a hunt with this title')
-                    } else {
-                        console.log(error)
-                    }
                     this.error = error
                 } else {
                     // addingHunt.value = false
@@ -90,9 +86,10 @@ export const useHuntStore = defineStore('hunts', {
                         this.hunts.push(Hunts[0])
                         this.currentHunt = Hunts[0].id    
                     }
+                    this.error = null
                 }
             }
-      }
+        }
 
     },
 })

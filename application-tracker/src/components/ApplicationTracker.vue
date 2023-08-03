@@ -50,7 +50,7 @@
 
     async function getHunts() {
         await storeHunts.getHunts()
-        if (Object.keys(storeHunts.error).length !== 0) {
+        if (storeHunts.error) {
             console.log("error getting hunts")
         } else {
             console.log(`succes ${storeHunts.hunts}`)
@@ -67,7 +67,7 @@
             goalTechStack.value,
             goalJobTitle.value
         )
-        if (Object.keys(storeHunts.error).length !== 0) {
+        if (storeHunts.error) {
             console.log('error submiting job hunt')
         } else {
             console.log(`successfully added job hunt ${storeHunts.hunts}`)
@@ -129,6 +129,9 @@
                 </div>
             </div>
             <div class="form-content-wrapper flex flex-col gap-8 m-10">
+                <div v-if="storeHunts.error">
+                    <span class="text-red-500"> {{ storeHunts.error }} </span>
+                </div>
                 <div class="title-form-wrapper gap-6 flex flex-col text-3xl">
                     <div class="flex flex-row bg-white gap-4">
                         <label for="hunt_title" class="place-self-start"> Hunt Title: </label>
