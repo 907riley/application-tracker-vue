@@ -16,7 +16,7 @@ const router = createRouter({
             path: '/home',
             name: 'Home',
             component: () => import('../components/ApplicationTracker.vue'),
-            meta: { requiresAuth: true },
+            // meta: { requiresAuth: true },
             children: [
                 {
                     path: 'applications',

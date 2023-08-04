@@ -12,13 +12,34 @@ const storeHunts = useHuntStore()
 
 type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
+
+const defaultApplication: Application = {
+    user_id: storeUser.userId,
+    id: "",
+    hunt_id: -1,
+    created_at: null,
+    job_title: "Software Developer",
+    company: "Computify",
+    location: "Remote",
+    pay: 65000,
+    applied_at: (new Date().toISOString().slice(0, 10)),
+    response: false,
+    application_link: "https://www.exampleLink.com"
+}
+
+
 export const useApplicationStore = defineStore('applications', {
     state: () => ({
         applications: <Application[]>[],
         error: <PostgrestError | null>{},
-        activeApplication: false,
         sortedBy: <keyof Application>'job_title',
-        ascending: true
+        ascending: true,
+        addingApplication: false,
+        updatingApplication: false,
+        deletingApplication: false,
+        updatingId: "",
+        deletingId: "",
+        currentApplicationForm: <Application> defaultApplication
     }),
     getters: {
         applicationsDateFormatted(): Application[] {
@@ -72,7 +93,7 @@ export const useApplicationStore = defineStore('applications', {
                 }
             }
         },
-        async addApplication(jobTitle: string, company: string | null, location: string | null, pay: number | null, appliedAt: string | null, response: boolean | null, applicationLink: string | null) {
+        async addApplication() {
             const localUserId = storeUser.userId
             const currentHunt = storeHunts.currentHunt
 
@@ -83,13 +104,13 @@ export const useApplicationStore = defineStore('applications', {
                         {
                             user_id: localUserId,
                             hunt_id: currentHunt,
-                            job_title: jobTitle,
-                            company: company,
-                            location: location,
-                            pay: pay,
-                            applied_at: appliedAt,
-                            response: response,
-                            application_link: applicationLink
+                            job_title: this.currentApplicationForm.job_title,
+                            company: this.currentApplicationForm.company,
+                            location: this.currentApplicationForm.location,
+                            pay: this.currentApplicationForm.pay,
+                            applied_at: this.currentApplicationForm.applied_at,
+                            response: this.currentApplicationForm.response,
+                            application_link: this.currentApplicationForm.application_link
                         }
                     ])
                     .select('*')
@@ -101,44 +122,48 @@ export const useApplicationStore = defineStore('applications', {
                     console.log(`succesfully submitted new application ${data}`)
                     if (data) {
                         this.applications.push(data[0])
+                        this.addingApplication = false
+                        // TODO: RESET APPLICATION FORM TO DEFAULT
                         this.error = null
                     }
                 }
             }
         },
-        async deleteApplication(deleteId: string) {
+        async deleteApplication() {
             const { error } = await supabase
                 .from('Applications')
                 .delete()
-                .eq('id', deleteId)
+                .eq('id', this.deletingId)
 
             if (error) {
                 this.error = error
             } else {
                 console.log('successfully deleted')
                 this.applications = this.applications.filter((app) => { 
-                    if (app.id === deleteId) {
+                    if (app.id === this.deletingId) {
                         return false
                     } else {
                         return true
                     }
                 })
                 this.error = null
+                this.deletingApplication = false
+                this.deletingId = ""
             }
         },
-        async updateApplication(id: string, jobTitle: string, company: string | null, location: string | null, pay: number | null, appliedAt: string | null, response: boolean | null, applicationLink: string | null) {
+        async updateApplication() {
             const { data, error } = await supabase
                 .from('Applications')
                 .update({
-                    job_title: jobTitle,
-                    company: company,
-                    location: location,
-                    pay: pay,
-                    applied_at: appliedAt,
-                    response: response,
-                    application_link: applicationLink
+                    job_title: this.currentApplicationForm.job_title,
+                    company: this.currentApplicationForm.company,
+                    location: this.currentApplicationForm.location,
+                    pay: this.currentApplicationForm.pay,
+                    applied_at: this.currentApplicationForm.applied_at,
+                    response: this.currentApplicationForm.response,
+                    application_link: this.currentApplicationForm.application_link
                 })
-                .eq('id', id)
+                .eq('id', this.updatingId)
                 .select('*')
             
             if (error) {
@@ -147,19 +172,31 @@ export const useApplicationStore = defineStore('applications', {
             } else {
                 console.log('succesfully updated')
                 this.applications = this.applications.map((app) => {
-                    if (app.id === id) {
-                        app.job_title = jobTitle
-                        app.company = company
-                        app.location = location
-                        app.pay = pay
-                        app.applied_at = appliedAt
-                        app.response = response
-                        app.application_link = applicationLink
+                    if (app.id === this.updatingId) {
+                        app.job_title = this.currentApplicationForm.job_title
+                        app.company = this.currentApplicationForm.company
+                        app.location = this.currentApplicationForm.location
+                        app.pay = this.currentApplicationForm.pay
+                        app.applied_at = this.currentApplicationForm.applied_at
+                        app.response = this.currentApplicationForm.response
+                        app.application_link = this.currentApplicationForm.application_link
                     }
                     return app
                 })
                 this.error = null
+                this.updatingApplication = false
+                // TODO: RESET TO DEFAULT APPLICATION
+                this.updatingId = ""
             }
+        },
+        displayUpdatingApplicationForm() {
+            this.currentApplicationForm = this.applications.filter((app) => {
+                if (app.id === this.updatingId) {
+                    return true
+                }
+                return false
+            })[0]
+            this.updatingApplication = true
         },
         // FIXME: this is jank
         getSingleApplication(searchId: string): Application {
@@ -169,6 +206,15 @@ export const useApplicationStore = defineStore('applications', {
                 }
                 return false
             })[0]
-        }
+        },
+        exitApplicationForm() {
+            this.addingApplication = false
+            this.updatingApplication = false
+            this.deletingApplication = false
+            this.updatingId = ""
+            this.deletingId = ""
+            this.currentApplicationForm = defaultApplication
+            // TODO: RESET APPLICATION FORM TO DEFAULT
+        },
     }
 })

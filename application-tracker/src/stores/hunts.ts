@@ -15,7 +15,20 @@ export const useHuntStore = defineStore('hunts', {
     state: () => ({
         hunts: <Hunt[]>[],
         currentHunt: useStorage('currentHunt', -1),
-        error: <PostgrestError | null>{}
+        error: <PostgrestError | null>{},
+        addingHunt: false,
+        currentHuntForm: <Hunt> {
+            created_at: new Date().toISOString(),
+            start_date_time: new Date().toISOString(),
+            goal_job_title: "Junior Software Dev",
+            goal_salary: 60000,
+            goal_job_type: "Junior",
+            goal_location: "Remote",
+            goal_tech_stack: "Vue.js + Supabase",
+            hunt_title: "Post Grad Hunt",
+            id: -1,
+            user_id: userStore.userId
+        }
     }),
     getters: {
 
@@ -56,7 +69,7 @@ export const useHuntStore = defineStore('hunts', {
             } 
         },
       
-        async submitJobHunt(huntTitle: string, goalSalary: number, goalJobType: string, goalLocation: string, goalTechStack: string, goalJobTitle: string) {
+        async submitJobHunt() {
             // console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
       
             const localUserId = userStore.userId
@@ -68,12 +81,12 @@ export const useHuntStore = defineStore('hunts', {
                 .insert([
                     {
                         user_id: localUserId,
-                        hunt_title: huntTitle,
-                        goal_salary: goalSalary,
-                        goal_job_title: goalJobTitle,
-                        goal_location: goalLocation,
-                        goal_tech_stack: goalTechStack,
-                        goal_job_type: goalJobTitle
+                        hunt_title: this.currentHuntForm.hunt_title,
+                        goal_salary: this.currentHuntForm.goal_salary,
+                        goal_job_title: this.currentHuntForm.goal_job_title,
+                        goal_location: this.currentHuntForm.goal_location,
+                        goal_tech_stack: this.currentHuntForm.goal_tech_stack,
+                        goal_job_type: this.currentHuntForm.goal_job_type
                     }
                 ])
                 .select('*')
@@ -87,6 +100,8 @@ export const useHuntStore = defineStore('hunts', {
                         this.currentHunt = Hunts[0].id    
                     }
                     this.error = null
+                    this.addingHunt = false
+                    // TODO: REST HUNT FORM HERE
                 }
             }
         }
