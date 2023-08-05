@@ -39,7 +39,7 @@ export const useApplicationStore = defineStore('applications', {
         deletingApplication: false,
         updatingId: "",
         deletingId: "",
-        currentApplicationForm: <Application> defaultApplication
+        currentApplicationForm: <Application> JSON.parse(JSON.stringify(defaultApplication))
     }),
     getters: {
         applicationsDateFormatted(): Application[] {
@@ -123,8 +123,8 @@ export const useApplicationStore = defineStore('applications', {
                     if (data) {
                         this.applications.push(data[0])
                         this.addingApplication = false
-                        // TODO: RESET APPLICATION FORM TO DEFAULT
                         this.error = null
+                        this.resetApplicationForm()
                     }
                 }
             }
@@ -185,8 +185,8 @@ export const useApplicationStore = defineStore('applications', {
                 })
                 this.error = null
                 this.updatingApplication = false
-                // TODO: RESET TO DEFAULT APPLICATION
                 this.updatingId = ""
+                this.resetApplicationForm()
             }
         },
         displayUpdatingApplicationForm() {
@@ -213,8 +213,11 @@ export const useApplicationStore = defineStore('applications', {
             this.deletingApplication = false
             this.updatingId = ""
             this.deletingId = ""
-            this.currentApplicationForm = defaultApplication
+            this.resetApplicationForm()
             // TODO: RESET APPLICATION FORM TO DEFAULT
         },
+        resetApplicationForm() {
+            this.currentApplicationForm = JSON.parse(JSON.stringify(defaultApplication))
+        }
     }
 })
