@@ -123,6 +123,7 @@
 
             display: flex;
             flex-direction: column;
+            height: 100vh;
 
             @media (max-width: 768px) {
                 padding-left: 6rem;
@@ -134,8 +135,8 @@
             }
 
             .content-wrapper {
-                flex: 1 1 0;
-
+                flex: 1;
+                min-height: 0;
                 display: flex;
                 flex-direction: column;
                 background-color: var(--light-aquamarine);

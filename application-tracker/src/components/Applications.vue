@@ -62,6 +62,7 @@
 
     onMounted(() => {
         getApplications()
+        hideScrollbar()
     })
 
     onUnmounted(() => {
@@ -139,10 +140,30 @@
         return '$0'
     }
 
+    function hideScrollbar() {
+        let parentWrapper = document.getElementById('labels-parent')
+        let labelWrapper = document.getElementById('labels')
+        let scrollSpaceDiv = document.getElementById('scroll-space')
+        let scrollEvil = document.getElementById('scroll-bar-pain')
+
+        if (parentWrapper && labelWrapper && scrollSpaceDiv) {
+            // get the scrollbar width
+            let scrollWidth = parentWrapper.clientWidth - labelWrapper.clientWidth
+        
+            // get rid of the overflow
+            labelWrapper.style.overflow = "hidden"
+        
+            scrollSpaceDiv.style.width = String(scrollWidth + "px")
+            // add width to the last child
+            console.log(`scroll width: ${scrollWidth} ${scrollSpaceDiv}`)
+        }
+            
+    }
+
 </script>
 
 <template>
-    <div class="h-fit p-5 flex-1 flex flex-col">
+    <div class="full-application-wrapper p-5 flex-1 flex flex-col">
         <div class="search-add-bar-wrapper h-32 flex flex-row">
             <div class="search-bar-wrapper my-auto">
                 <input v-model="searchBar" type="text" placeholder="Search" class="search-bar text-4xl border-2 py-2 px-4 border-black rounded-full font-genos font-black"/>
@@ -152,26 +173,30 @@
                 <button @click="() => {storeApplications.addingApplication = true}" class="add-application-button text-white font-genos text-5xl p-2">Add Application</button>
             </div>
         </div>
-        <div class="information-section-wrapper flex-1 flex flex-col">
-            <div class="label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 rounded-t-3xl">
-                <div v-for="field in applicationFields" class="label-wrapper inline flex flex-row">
-                    <div class="w-12">
-
-                    </div>
-                    <button class="col-span-1 py-4 flex-1" @click="changeSortOrder(field.databaseString)">{{ field.displayString }}</button>
-                    <div class="w-12 flex">
-                        <div v-if="storeApplications.sortedBy === field.databaseString" class="flex-1 flex flex-col justify-center">
-                            <span v-if="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
-                                arrow_upward
-                            </span>
-                            <span v-else="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
-                                arrow_downward
-                            </span>
+        <div id="labels-parent" class="information-section-wrapper flex-fit flex flex-col">
+            <div id="scroll-bar-pain" class="flex flex-row">
+                <div id="labels" class="flex-1 label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 rounded-t-3xl overflow-y-scroll">
+                    <div v-for="field in applicationFields" class="label-wrapper inline flex flex-row">
+                        <div class="w-12">
+    
+                        </div>
+                        <button class="col-span-1 py-4 flex-1" @click="changeSortOrder(field.databaseString)">{{ field.displayString }}</button>
+                        <div class="w-12 flex">
+                            <div v-if="storeApplications.sortedBy === field.databaseString" class="flex-1 flex flex-col justify-center">
+                                <span v-if="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                    arrow_upward
+                                </span>
+                                <span v-else="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                    arrow_downward
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div id="scroll-space" class="">
+                </div>
             </div>
-            <div class="information-wrapper flex flex-col flex-1">
+            <div class="information-wrapper flex flex-col flex-initial max-h-full overflow-y-scroll">
                 <div v-for="applications in searchApplication()" :key="applications.id" class="grid grid-cols-8 bg-white font-genos">
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
@@ -233,6 +258,16 @@
 
 
 <style lang="scss">
+
+    .full-application-wrapper,
+    .information-section-wrapper {
+        flex: 1;
+        min-height: 0;
+    }
+
+    .information-section-wrapper {
+    }
+
     #done-button {
         background-color: var(--light-pink);
     }
