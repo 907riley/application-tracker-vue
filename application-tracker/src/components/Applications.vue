@@ -168,7 +168,7 @@
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
-                            {{ new Date(applications.applied_at || "1970-12-12").getMonth() + 1 }} / {{ new Date(applications.applied_at || "1970-12-12").getDate() }} / {{ new Date(applications.applied_at || "1970-12-12").getFullYear() }}
+                            {{ applications.applied_at?.slice(5, 7) }} / {{ applications.applied_at?.slice(8, 10) }} / {{ applications.applied_at?.slice(0, 4) }}
                         </div>
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
