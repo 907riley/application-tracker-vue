@@ -20,6 +20,26 @@ body {
   min-height: 100vh;
 }
 
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--dark-aquamarine) #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--dark-aquamarine);
+  border-radius: 10px;
+  border: 3px solid #ffffff;
+}
+
 /* select::-ms-expand {
   display: none;
 }
