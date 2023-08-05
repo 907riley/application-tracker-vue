@@ -36,7 +36,7 @@
                         <input id="add_application_location" type="text" v-model="storeApplications.currentApplicationForm.location" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
-                        <label for="add_application_pay" class="place-self-start"> Pay: </label>
+                        <label for="add_application_pay" class="place-self-start"> Salary: </label>
                         <div class="flex-1 "></div>
                         <input id="add_application_pay" type="number" v-model="storeApplications.currentApplicationForm.pay" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>

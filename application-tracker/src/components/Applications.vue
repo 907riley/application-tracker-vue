@@ -33,7 +33,7 @@
         
         }, 
         {
-            displayString: 'Pay',
+            displayString: 'Salary',
             databaseString: 'pay',
         
         }, 
@@ -112,6 +112,33 @@
     }
 
 
+    function parseMoney(pay: number | null) {
+        // should be decimal safe
+        if (!pay) {
+            return "$0"
+        }
+        const moneyString = String(pay).split('.')[0]
+
+        if (moneyString.length <= 3) {
+            return '$' + moneyString
+        } else {
+            let stringIndex = moneyString.length % 3
+            let newMoneyString = moneyString.slice(0, stringIndex)
+
+            if (stringIndex == 0) {
+                newMoneyString +=  moneyString.slice(stringIndex, stringIndex + 3)
+                stringIndex += 3
+            }
+
+            while (stringIndex < moneyString.length) {
+                newMoneyString += ',' + moneyString.slice(stringIndex, stringIndex + 3)
+                stringIndex += 3
+            }
+            return '$' + newMoneyString
+        }
+        return '$0'
+    }
+
 </script>
 
 <template>
@@ -163,7 +190,7 @@
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
-                            {{ applications.pay }}
+                            {{ parseMoney(applications.pay) }}
                         </div>
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
