@@ -177,20 +177,24 @@
             <div id="scroll-bar-pain" class="flex flex-row">
                 <div id="labels" class="flex-1 label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8 rounded-t-3xl overflow-y-scroll">
                     <div v-for="field in applicationFields" class="label-wrapper inline flex flex-row">
-                        <div class="w-12">
-    
-                        </div>
-                        <button class="col-span-1 py-4 flex-1" @click="changeSortOrder(field.databaseString)">{{ field.displayString }}</button>
-                        <div class="w-12 flex">
-                            <div v-if="storeApplications.sortedBy === field.databaseString" class="flex-1 flex flex-col justify-center">
-                                <span v-if="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
-                                    arrow_upward
-                                </span>
-                                <span v-else="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
-                                    arrow_downward
-                                </span>
+                        <button class="col-span-1 flex flex-row flex-1 items-center" @click="changeSortOrder(field.databaseString)">
+                            <div class="w-12">
+        
                             </div>
-                        </div>
+                            <div class="py-4 flex-1">
+                                {{ field.displayString }}
+                            </div>
+                            <div class="w-12 flex">
+                                <div v-if="storeApplications.sortedBy === field.databaseString" class="flex-1 flex flex-col justify-center">
+                                    <span v-if="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                        arrow_upward
+                                    </span>
+                                    <span v-else="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                        arrow_downward
+                                    </span>
+                                </div>
+                            </div>
+                        </button>   
                     </div>
                 </div>
                 <div id="scroll-space" class="">
