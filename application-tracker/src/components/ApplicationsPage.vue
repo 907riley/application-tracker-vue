@@ -11,41 +11,41 @@
     const storeHunts = useHuntStore()
 
 
-    const applicationFieldsArray: {displayString: string, databaseString: keyof Application}[]  = [
+    const applicationFieldsArray: {displayString: string, databaseString: keyof Application, id: number}[]  = [
         {
             displayString: 'Title',
             databaseString: 'job_title',
-        
+            id: 0
         },
         {
             displayString: 'Company',
             databaseString: 'company',
-        
+            id: 1
         },
         {
             displayString: 'Location',
             databaseString: 'location',
-        
+            id: 2
         }, 
         {
             displayString: 'Salary',
             databaseString: 'pay',
-        
+            id: 3
         }, 
         {
             displayString: 'Date Applied',
             databaseString: 'applied_at',
-        
+            id: 4
         }, 
         {
             displayString: 'Response',
             databaseString: 'response',
-        
+            id: 5
         }, 
         {
             displayString: 'Link',
             databaseString: 'application_link',
-        
+            id: 6
         }
     ]
 
@@ -74,7 +74,7 @@
     function searchApplication() : Application[] {
         if (storeApplications.applications && storeApplications.applications.length > 0) {
             return storeApplications.sortedApplications.filter((app: Application) => {
-                for ( const [key , value] of Object.entries(app)) {
+                for ( const [, value] of Object.entries(app)) {
                     // only dealing with string values rn TODO: fix
                     if (typeof value === 'string') {
                         if (value.toLowerCase().includes(searchBar.value.toLowerCase())) {
@@ -132,14 +132,12 @@
             }
             return '$' + newMoneyString
         }
-        return '$0'
     }
 
     function hideScrollbar() {
         let parentWrapper = document.getElementById('labels-parent')
         let labelWrapper = document.getElementById('labels')
         let scrollSpaceDiv = document.getElementById('scroll-space')
-        let scrollEvil = document.getElementById('scroll-bar-pain')
 
         if (parentWrapper && labelWrapper && scrollSpaceDiv) {
             // get the scrollbar width
@@ -171,7 +169,7 @@
         <div id="labels-parent" class="information-section-wrapper flex-fit flex flex-col">
             <div id="scroll-bar-pain" class="flex flex-row rounded-t-3xl">
                 <div id="labels" class="flex-1 label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8  overflow-y-scroll">
-                    <div v-for="field in applicationFields" class="label-wrapper inline flex flex-row">
+                    <div v-for="field in applicationFields" :key="field.id" class="label-wrapper inline flex flex-row">
                         <button class="col-span-1 flex flex-row flex-1 items-center" @click="changeSortOrder(field.databaseString)">
                             <div class="w-12">
         
@@ -184,7 +182,7 @@
                                     <span v-if="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
                                         arrow_upward
                                     </span>
-                                    <span v-else="storeApplications.ascending" class="sorted-arrow material-symbols-outlined ">
+                                    <span v-else class="sorted-arrow material-symbols-outlined ">
                                         arrow_downward
                                     </span>
                                 </div>

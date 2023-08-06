@@ -1,42 +1,33 @@
 
 <script setup lang="ts">
-    import Applications from './Applications.vue'
     import TopControlBar from './TopControlBox.vue'
     import SideBar from './SideBar.vue'
     import ApplicationForm from './ApplicationForm.vue'
     import ConfirmDeletion from './ConfirmDeletion.vue'
     import HuntForm from './HuntForm.vue'
 
-    import { ref, onMounted } from 'vue';
-    import { supabase } from '@/clients/supabase';
-    import { useCurrentHuntStore } from '@/stores/currentHunt';
-    import { useUserStore } from '@/stores/user';
+    import { onMounted } from 'vue';
     import { useHuntStore } from '@/stores/hunts';
-    import { storeToRefs } from 'pinia';
     import { useApplicationStore } from '@/stores/applications';
 
-    const addingHunt = ref(false)
+    // const addingHunt = ref(false)
 
-    const storeUser = useUserStore()
-    // const storeCurrentHunt = useCurrentHuntStore()
     const storeHunts = useHuntStore()
     const storeApplications = useApplicationStore()
 
-
-    const localHunts = ref()
 
     onMounted(() => {
         storeHunts.getHunts()
     })
 
-    function displayHuntForm() {
-        addingHunt.value = true
-    }
+    // function displayHuntForm() {
+    //     addingHunt.value = true
+    // }
 
     // TODO: make form have default values somewhere, probably in the store
-    function exitHuntForm() {
-        addingHunt.value = false
-    }
+    // function exitHuntForm() {
+    //     addingHunt.value = false
+    // }
 
     // async function submitJobHunt() {
     //     console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)

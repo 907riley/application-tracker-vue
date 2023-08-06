@@ -70,9 +70,6 @@
 
 <script setup lang="ts">
     import { useApplicationStore } from '@/stores/applications'
-    import { type Database } from '@/db_types/supabase';
-
-    type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
     const storeApplications = useApplicationStore()
 
