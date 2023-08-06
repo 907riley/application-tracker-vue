@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { supabase } from '@/clients/supabase';
-import { useStorage } from '@vueuse/core'
 import { useUserStore } from './user';
 import { type Database } from '@/db_types/supabase';
 import { useHuntStore } from './hunts'
-import type { App } from 'vue';
 import { type PostgrestError } from '@supabase/supabase-js';
 
 const storeUser = useUserStore()
@@ -152,7 +150,7 @@ export const useApplicationStore = defineStore('applications', {
             }
         },
         async updateApplication() {
-            const { data, error } = await supabase
+            const { data: Application, error } = await supabase
                 .from('Applications')
                 .update({
                     job_title: this.currentApplicationForm.job_title,
@@ -173,13 +171,13 @@ export const useApplicationStore = defineStore('applications', {
                 console.log('succesfully updated')
                 this.applications = this.applications.map((app) => {
                     if (app.id === this.updatingId) {
-                        app.job_title = this.currentApplicationForm.job_title
-                        app.company = this.currentApplicationForm.company
-                        app.location = this.currentApplicationForm.location
-                        app.pay = this.currentApplicationForm.pay
-                        app.applied_at = this.currentApplicationForm.applied_at
-                        app.response = this.currentApplicationForm.response
-                        app.application_link = this.currentApplicationForm.application_link
+                        app.job_title = Application[0].job_title
+                        app.company = Application[0].company
+                        app.location = Application[0].location
+                        app.pay = Application[0].pay
+                        app.applied_at = Application[0].applied_at
+                        app.response = Application[0].response
+                        app.application_link = Application[0].application_link
                     }
                     return app
                 })

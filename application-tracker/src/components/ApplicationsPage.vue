@@ -1,17 +1,12 @@
 <script setup lang="ts">
-    import { ref, type App, type Ref, onMounted, watchEffect, watch, onUnmounted} from 'vue'
-    import { useCurrentHuntStore } from '@/stores/currentHunt';
-    import { storeToRefs } from 'pinia';
-    import { supabase } from '@/clients/supabase';
+    import { ref, onMounted, watch, onUnmounted} from 'vue'
     import { useApplicationStore } from '@/stores/applications';
     import { useHuntStore } from '@/stores/hunts';
     import type { Database } from '@/db_types/supabase';
-    import { stringify } from 'querystring';
 
 
     type Application = Database["public"]["Tables"]["Applications"]["Row"]
 
-    const storeCurrentHunt = useCurrentHuntStore()
     const storeApplications = useApplicationStore()
     const storeHunts = useHuntStore()
 

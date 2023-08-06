@@ -1,4 +1,3 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from '@/clients/supabase';
 import { useUserStore } from './user';
@@ -35,24 +34,22 @@ export const useHuntStore = defineStore('hunts', {
     },
     actions: {
         setHunts(newHunts: Hunt[]) {
-          this.hunts = newHunts
+            this.hunts = newHunts
         },
-      
         setCurrentHunt(newHunt: number) {
-          this.currentHunt = newHunt
+            this.currentHunt = newHunt
         },
-      
         async getHunts() {
-          const localUserId = userStore.userId
-          console.log(localUserId)
-      
+            const localUserId = userStore.userId
+            console.log(localUserId)
+    
             // get the hunts
             if (localUserId) {
-                let { data: Hunts, error } = await supabase
+                const { data: Hunts, error } = await supabase
                     .from('Hunts')
                     .select("*")
                     .eq('user_id', localUserId)
-      
+    
                 if (error) {
                     console.log(error)
                     this.error = error
@@ -68,10 +65,10 @@ export const useHuntStore = defineStore('hunts', {
                 }
             } 
         },
-      
+    
         async submitJobHunt() {
             // console.log(huntTitle, goalSalary, goalJobType, goalLocation, goalTechStack, goalJobTitle)
-      
+     
             const localUserId = userStore.userId
             // console.log(localUserId)
         

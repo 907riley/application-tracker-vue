@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory, START_LOCATION, type NavigationGuardNext, type RouteLocationNormalized} from 'vue-router'
-import Login from '../components/Login.vue'
+import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized} from 'vue-router'
+import Login from '../components/LoginPage.vue'
 import { supabase } from '@/clients/supabase'
 
 let localUser
@@ -21,22 +21,22 @@ const router = createRouter({
                 {
                     path: 'applications',
                     name: 'Applications',
-                    component: () => import('../components/Applications.vue'),
+                    component: () => import('../components/ApplicationsPage.vue'),
                 },
                 {
                     path: 'stats',
                     name: 'Stats',
-                    component: () => import('../components/Stats.vue'),
+                    component: () => import('../components/StatsPage.vue'),
                 },
                 {
                     path: 'profile',
                     name: 'Profile',
-                    component: () => import('../components/Profile.vue'),
+                    component: () => import('../components/ProfilePage.vue'),
                 },
                 {
                     path: 'settings',
                     name: 'Settings',
-                    component: () => import('../components/Settings.vue'),
+                    component: () => import('../components/SettingsPage.vue'),
                 }
             ]
         }

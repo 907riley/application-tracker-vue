@@ -1,10 +1,5 @@
 <script setup lang="ts">
-    import DropDownVue from './DropDown.vue';
-    import { supabase } from '@/clients/supabase';
-    import { ref, onMounted } from 'vue';
-    import { storeToRefs } from 'pinia';
     import { useHuntStore } from '@/stores/hunts';
-    import { useCurrentHuntStore } from '@/stores/currentHunt';
     import { useApplicationStore } from '@/stores/applications';
 
     const storeApplications = useApplicationStore()

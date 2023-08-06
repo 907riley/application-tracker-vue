@@ -67,7 +67,6 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
-    import { supabase } from '../clients/supabase'
     import router from '../router'
     import { useUserStore } from '@/stores/user';
 
@@ -124,11 +123,11 @@
     }
 
     // see current user
-    async function seeCurrentUser() {
-        console.log("see current user")
-        const localUser = await supabase.auth.getSession()
-        console.log(localUser)
-    }
+    // async function seeCurrentUser() {
+    //     console.log("see current user")
+    //     const localUser = await supabase.auth.getSession()
+    //     console.log(localUser)
+    // }
 
 </script>
 

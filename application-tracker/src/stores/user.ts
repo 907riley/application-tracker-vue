@@ -1,8 +1,6 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from '@/clients/supabase';
-import router from '@/router';
-import { AuthApiError, AuthError } from '@supabase/supabase-js';
+import { AuthError } from '@supabase/supabase-js';
 import { useStorage } from '@vueuse/core'
 
 
