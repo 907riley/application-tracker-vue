@@ -1,8 +1,5 @@
 <script setup lang="ts">
     import { useHuntStore } from '@/stores/hunts';
-    import { useApplicationStore } from '@/stores/applications';
-
-    const storeApplications = useApplicationStore()
 
     // const store = useCurrentHuntStore()
     const storeHunts = useHuntStore()
