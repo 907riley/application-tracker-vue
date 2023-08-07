@@ -20,7 +20,7 @@ export interface Database {
           job_title: string
           location: string | null
           pay: number | null
-          response: boolean | null
+          status: string | null
           user_id: string | null
         }
         Insert: {
@@ -33,7 +33,7 @@ export interface Database {
           job_title?: string
           location?: string | null
           pay?: number | null
-          response?: boolean | null
+          status?: string | null
           user_id?: string | null
         }
         Update: {
@@ -46,7 +46,7 @@ export interface Database {
           job_title?: string
           location?: string | null
           pay?: number | null
-          response?: boolean | null
+          status?: string | null
           user_id?: string | null
         }
         Relationships: [
