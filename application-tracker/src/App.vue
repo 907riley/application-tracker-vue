@@ -15,8 +15,14 @@
     --dark-aquamarine: #053B3F;
     --bright-pink: #FF00B8;
     --light-pink: #D728A6;
-    --disabled-aquamarine: #237667
+    --disabled-aquamarine: #237667;
 
+    --interviewing-color: #95FF9F;
+    --rejected-color: #FEAD9B;
+    --offered-color: #5BCEDD;
+    --accepted-color: #40D24E;
+    --declined-color: #FF6A49;
+    --pending-color: #FFFFFF;
     // font-family: 'Genos', sans-serif;
   }
 

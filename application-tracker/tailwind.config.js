@@ -18,6 +18,12 @@ module.exports = {
       colors: {
         'light-blue-custom': '#AEDBFF',
         'dark-blue-custom': '#6B98BB',
+        'interviewing': '#95FF9F',
+        'rejected': '#FEAD9B',
+        'offered': '#5BCEDD',
+        'accepted': '#40D24E',
+        'declined': '#FF6A49',
+        'pending': '#FFFFFF',
       },
       dropShadow: {
         '3xl': '0px 3px 3px rgba(0, 0, 0, 0.5)',

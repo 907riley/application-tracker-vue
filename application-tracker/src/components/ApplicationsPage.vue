@@ -153,6 +153,23 @@
             
     }
 
+    function getApplicationColor(status: string | null) {
+        switch(status) {
+            case "Interviewing":
+                return "bg-interviewing"
+            case "Offered":
+                return "bg-offered"
+            case "Rejected":
+                return "bg-rejected"
+            case "Declined":
+                return "bg-declined"
+            case "Accepted":
+                return "bg-accepted"
+            default:
+                return 'bg-pending'
+        }
+    }
+
 </script>
 
 <template>
@@ -194,7 +211,7 @@
                 </div>
             </div>
             <div class="information-wrapper flex flex-col flex-initial max-h-full overflow-y-scroll">
-                <div v-for="applications in searchApplication()" :key="applications.id" class="grid grid-cols-8 bg-white font-genos">
+                <div v-for="applications in searchApplication()" :key="applications.id" id="row-wrapper" :class="getApplicationColor(applications.status)">
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.job_title }}
@@ -260,6 +277,12 @@
     .information-section-wrapper {
         flex: 1;
         min-height: 0;
+    }
+
+    #row-wrapper {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        font-family: 'Genos','ui-san-serif';
     }
 
     #done-button {
