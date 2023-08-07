@@ -38,8 +38,8 @@
             id: 4
         }, 
         {
-            displayString: 'Response',
-            databaseString: 'response',
+            displayString: 'Status',
+            databaseString: 'status',
             id: 5
         }, 
         {
@@ -222,7 +222,7 @@
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
-                            {{ applications.response }}
+                            {{ applications.status }}
                         </div>
                     </div>
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 

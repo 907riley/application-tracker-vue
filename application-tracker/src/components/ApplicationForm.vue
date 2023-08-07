@@ -46,9 +46,12 @@
                         <input id="add_application_date_applied" type="date" v-model="storeApplications.currentApplicationForm.applied_at" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
-                        <label for="add_application_response" class="place-self-start"> Response: </label>
+                        <label for="add_application_status" class="place-self-start"> Status: </label>
                         <div class="flex-1 "></div>
-                        <input id="add_application_response" type="checkbox" v-model="storeApplications.currentApplicationForm.response" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/>
+                        <!-- <input id="goal_job_type" type="text" class="p-1 px-2 bg-zinc-300 border border-black place-self-end"/> -->
+                        <select id="add_application_status" v-model="storeApplications.currentApplicationForm.status" class="p-1 px-2 bg-zinc-300 border border-black place-self-end">
+                            <option v-for="status in statusTypes" :key="status.value" :value="status.value" >{{status.value}}</option>
+                        </select>
                     </div>
                     <div class="flex flex-row bg-white gap-4">
                         <label for="add_application_link" class="place-self-start"> Application Link: </label>
@@ -70,9 +73,18 @@
 
 <script setup lang="ts">
     import { useApplicationStore } from '@/stores/applications'
+    import { ref } from 'vue';
 
     const storeApplications = useApplicationStore()
 
+    const statusTypes = ref([
+        { value: "Pending" },
+        { value: "Rejected" },
+        { value: "Interviewing" },
+        { value: "Offered" },
+        { value: "Declined" },
+        { value: "Accepted" }
+    ])
 </script>
 
 <style lang="scss">

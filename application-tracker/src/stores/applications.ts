@@ -21,7 +21,7 @@ const defaultApplication: Application = {
     location: "Remote",
     pay: 65000,
     applied_at: (new Date().toISOString().slice(0, 10)),
-    response: false,
+    status: "Pending",
     application_link: "https://www.exampleLink.com"
 }
 
@@ -107,7 +107,7 @@ export const useApplicationStore = defineStore('applications', {
                             location: this.currentApplicationForm.location,
                             pay: this.currentApplicationForm.pay,
                             applied_at: this.currentApplicationForm.applied_at,
-                            response: this.currentApplicationForm.response,
+                            status: this.currentApplicationForm.status,
                             application_link: this.currentApplicationForm.application_link
                         }
                     ])
@@ -158,7 +158,7 @@ export const useApplicationStore = defineStore('applications', {
                     location: this.currentApplicationForm.location,
                     pay: this.currentApplicationForm.pay,
                     applied_at: this.currentApplicationForm.applied_at,
-                    response: this.currentApplicationForm.response,
+                    status: this.currentApplicationForm.status,
                     application_link: this.currentApplicationForm.application_link
                 })
                 .eq('id', this.updatingId)
@@ -176,7 +176,7 @@ export const useApplicationStore = defineStore('applications', {
                         app.location = Application[0].location
                         app.pay = Application[0].pay
                         app.applied_at = Application[0].applied_at
-                        app.response = Application[0].response
+                        app.status = Application[0].status
                         app.application_link = Application[0].application_link
                     }
                     return app
