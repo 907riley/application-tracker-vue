@@ -173,7 +173,15 @@
 </script>
 
 <template>
-    <div class="full-application-wrapper p-5 flex-1 flex flex-col">
+    <div v-if="!storeHunts.hunts || storeHunts.hunts.length === 0" class="flex flex-1">
+        <div class="flex-1 flex flex-col justify-center items-center">
+            <span class="material-symbols-outlined text-9xl p-5">
+                question_mark
+            </span>
+            <span>Add your first hunt by clicking the plus icon in the upper right corner!</span>
+        </div>
+    </div>
+    <div v-else class="full-application-wrapper p-5 flex-1 flex flex-col">
         <div class="search-add-bar-wrapper h-24 flex flex-row">
             <div class="search-bar-wrapper my-auto">
                 <input v-model="searchBar" type="text" placeholder="Search" class="search-bar text-4xl border-2 py-2 px-4 border-black rounded-full font-genos font-black"/>
@@ -183,7 +191,7 @@
                 <button @click="() => {storeApplications.addingApplication = true}" class="add-application-button text-white font-genos text-5xl p-2">Add Application</button>
             </div>
         </div>
-        <div id="labels-parent" class="information-section-wrapper flex-fit flex flex-col">
+        <div v-if="storeApplications.applications && storeApplications.applications.length > 0" id="labels-parent" class="information-section-wrapper flex-fit flex flex-col">
             <div id="scroll-bar-pain" class="flex flex-row rounded-t-3xl">
                 <div id="labels" class="flex-1 label-bar-wrapper font-genos text-3xl font-bold text-white grid grid-cols-8  overflow-y-scroll">
                     <div v-for="field in applicationFields" :key="field.id" class="label-wrapper inline flex flex-row">
@@ -210,7 +218,7 @@
                 <div id="scroll-space" class="">
                 </div>
             </div>
-            <div class="information-wrapper flex flex-col flex-initial max-h-full overflow-y-scroll">
+            <div class="information-wrapper flex flex-col flex-initial max-h-full overflow-y-scroll border-b border-l border-black">
                 <div v-for="applications in searchApplication()" :key="applications.id" id="row-wrapper" :class="getApplicationColor(applications.status)">
                     <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
@@ -266,6 +274,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="flex-1 flex flex-col justify-center items-center">
+            <button @click="() => {storeApplications.addingApplication = true}" class="hover:text-bright-pink">
+                <span class="material-symbols-outlined text-9xl p-5">
+                    add
+                </span>
+            </button>
+            <span>Add your first Job Application!</span>
         </div>
     </div>
 </template>

@@ -16,7 +16,7 @@
 
 <template>
         <div class="my-auto flex flex-row place-content-between gap-4 mr-4 top-control-wrapper">
-            <div class="border-2 dropdown-wrapper flex">
+            <div v-if="storeHunts.hunts && storeHunts.hunts.length > 0" class="border-2 dropdown-wrapper flex">
                     <!-- <label for="hunts" class="font-bold font-genos bold">Job Hunts</label> -->
                 <select id="hunts"  v-model="storeHunts.currentHunt" class="font-genos text-3xl font-bold px-5 flex-1">
                     <option v-for="hunt in storeHunts.hunts" :key="hunt.id" :value="hunt.id">{{hunt.hunt_title}}</option>

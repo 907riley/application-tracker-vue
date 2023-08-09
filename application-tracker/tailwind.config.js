@@ -24,6 +24,12 @@ module.exports = {
         'accepted': '#40D24E',
         'declined': '#FF6A49',
         'pending': '#FFFFFF',
+        'dark-aqua': "#053B3F",
+        'light-aqua': "#41CAB2",
+        'bright-pink': "#FF00B8",
+        'light-pink': "#D728A6",
+        'bright-aqua': "#00FFD1",
+        'disabled-aqua': "#237667"
       },
       dropShadow: {
         '3xl': '0px 3px 3px rgba(0, 0, 0, 0.5)',

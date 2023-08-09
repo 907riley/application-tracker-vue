@@ -121,7 +121,7 @@
             }
 
             .top-bar-wrapper {
-                height: 116px;
+                height: 6rem;
                 background-color: var(--dark-aquamarine);
             }
 
