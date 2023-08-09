@@ -220,37 +220,37 @@
             </div>
             <div class="information-wrapper flex flex-col flex-initial max-h-full overflow-y-scroll border-b border-l border-black">
                 <div v-for="applications in searchApplication()" :key="applications.id" id="row-wrapper" :class="getApplicationColor(applications.status)">
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.job_title }}
                         </div>
                     </div>
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.company }}
                         </div>
                     </div>
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.location }}
                         </div>
                     </div>
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ parseMoney(applications.pay) }}
                         </div>
                     </div>
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.applied_at?.slice(5, 7) }} / {{ applications.applied_at?.slice(8, 10) }} / {{ applications.applied_at?.slice(0, 4) }}
                         </div>
                     </div>
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             {{ applications.status }}
                         </div>
                     </div>
-                    <div class="col-span-1 text-2xl p-2 border-r border-b border-black flex"> 
+                    <div class="col-span-1 text-3xl p-2 border-r border-b border-black flex"> 
                         <div class="m-auto flex-1 text-center">
                             <a target="_blank" rel="noopener noreferrer" v-if="applications.application_link?.toLowerCase() === 'wayup'"> WayUp </a>
                             <a target="_blank" rel="noopener noreferrer" v-else-if="applications.application_link?.toLowerCase() === 'linkedin'"> Linkedin </a>

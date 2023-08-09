@@ -1,14 +1,19 @@
 <template>
-    <div>
-        <h2>User Profile</h2>
-        <!-- <button @click="login" class="bg-blue-500">Log in</button>
-        <pre v-if="isAuthenticated">
-            <code>{{ user }}</code>
-        </pre> -->
-        {{ account?.data.session.user.email }}
-    </div>
-    <div>
-        <button @click="logout">logout</button>
+    <div class="flex-col">
+        <div class="font-genos font-bold text-9xl text-center">
+            Full profile page coming soon
+        </div>
+        <div class="flex flex-col m-5 gap-4 w-fit">
+            <div class="flex flex-row gap-4">
+                <h2>Email: </h2>
+                <!-- <button @click="login" class="bg-blue-500">Log in</button>
+                <pre v-if="isAuthenticated">
+                    <code>{{ user }}</code>
+                </pre> -->
+                {{ account?.data.session.user.email }}
+            </div>
+            <button @click="logout" class="p-2 bg-red-700">logout</button>
+        </div>
     </div>
 </template>
 
