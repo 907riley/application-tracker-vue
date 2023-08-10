@@ -2,7 +2,7 @@
 I'm a spreadsheet person that likes to keep track of data, so when I started applying to jobs post graduation, I created a spreadsheet to keep track of all my applications. I quickly realized that this was a great opportunity to make a little website to make entering, storing, and viewing my applications a lot easier. Working on this website has been a learning process but I've really enjoyed working on it so far.
 
 ### How to Use
-Not hosted yet but will be hosted on Vercel soon.
+~Not hosted yet but will be hosted on Vercel soon.~  Hosted [here](https://application-tracker-vue.vercel.app/)
 
 1. Create an account on the sign up page
 2. Create your first job hunt
